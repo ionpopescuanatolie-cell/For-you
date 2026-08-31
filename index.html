@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 Miesięcy Wspomnień, 6 Dni do Sekretu</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #ec4899;
+            --accent-hover: #db2777;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --locked-bg: #0f172a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 480px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .grid .card:last-child { grid-column: span 2; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card.active:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .card.locked {
+            background: var(--locked-bg);
+            border-color: #1e293b;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-step {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .card.locked .card-step {
+            color: var(--text-muted);
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .lock-timer {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 450px;
+            width: 100%;
+            padding: 24px;
+            position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .modal-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+        }
+
+        .gift-box {
+            background: #0f172a;
+            border: 2px dashed var(--accent);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .gift-code {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span class="badge">Tajny Projekt</span>
+        <h1>6 Miesięcy Wspomnień, 6 Dni do Sekretu</h1>
+        <p class="subtitle">15 września – 21 września: Każdego dnia odblokowuje się jeden poziom!</p>
+    </header>
+
+    <div class="grid" id="grid-container"></div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modal-title">Tytuł</h2>
+            <div class="modal-body" id="modal-body">Treść...</div>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            {
+                id: 1,
+                unlockDate: "2026-09-15",
+                dateLabel: "15 Września",
+                icon: "💬",
+                title: "Pierwszy Krok",
+                desc: "Jak to się wszystko zaczęło...",
+                text: "15 marca napisaliśmy do siebie po raz pierwszy. Dokładnie dzisiaj mija 6 miesięcy! Wtedy jeszcze nie wiedziałem, jak ważną częścią mojego życia się staniesz. Dziękuję Ci za każdy dzień, każdą wiadomość i każdy uśmiech na odległość!"
+            },
+            {
+                id: 2,
+                unlockDate: "2026-09-16",
+                dateLabel: "16 Września",
+                icon: "🎵",
+                title: "Nasza Muzyka",
+                desc: "Utwory, które przypominają mi o Tobie.",
+                text: "Muzyka, która przypomina mi o Tobie i naszych wieczornych rozmowach:<br><br>1. <i>Gibbs - Między ciszą a krzykiem</i><br>2. Twoja ulubiona melodia...<br><br>Muzyka łączy nas niezależnie od kilometrów!"
+            },
+            {
+                id: 3,
+                unlockDate: "2026-09-17",
+                dateLabel: "17 Września",
+                icon: "📍",
+                title: "Mapa Naszych Miejsc",
+                desc: "Miejsca, do których pójdziemy razem.",
+                text: "Kiedy wreszcie do Ciebie przyjadę, koniecznie musimy:<br>• Wybrać się na spacer nad Jezioro Białe w Okunince.<br>• Pójść na najlepszą kawę we Włodawie.<br>• Wybrać się całą trójką z Twoim synem na super wycieczkę!"
+            },
+            {
+                id: 4,
+                unlockDate: "2026-09-18",
+                dateLabel: "18 Września",
+                icon: "✨",
+                title: "6 Powodów",
+                desc: "Za co najbardziej Cię cenię.",
+                text: "Dlaczego jesteś dla mnie tak wyjątkowa:<br>1. Twój uśmiech i poczucie humoru.<br>2. Twoja troska i ciepłe serce.<br>3. To, jak wspaniałą jesteś mamą.<br>4. Twój głos, który potrafi poprawić mi każdy dzień.<br>5. Twoja szczerość.<br>6. Po prostu to, że jesteś."
+            },
+            {
+                id: 5,
+                unlockDate: "2026-09-19",
+                dateLabel: "19 Września",
+                icon: "📝",
+                title: "Plan na Przyszłość",
+                desc: "Co nas czeka dalej.",
+                text: "Co nas czeka w kolejnych 6 miesiącach:<br>✅ Spotkać się na żywo i wreszcie się przytulić.<br>✅ Zrobić nasze pierwsze wspólne zdjęcie.<br>✅ Wręczyć Ci główny prezent osobiście w Twoich rękach."
+            },
+            {
+                id: 6,
+                unlockDate: "2026-09-21",
+                dateLabel: "21 Września (Dzień Urodzin!)",
+                icon: "🎁",
+                title: "Prezent Urodzinowy",
+                desc: "Odbierz swój niespodziankowy prezent!",
+                text: "Wszystkiego Najlepszego! 21 września — Twój wyjątkowy dzień! Chociaż dzieli nas odległość, chcę, abyś dzisiaj poczuła się wyjątkowo. To mały prezent ode mnie dla Ciebie!<br><div class=\"gift-box\">Voucher:<br><div class=\"gift-code\">Karta Podarunkowa Allegro (500 PLN)</div></div><br><small>*A główny, osobisty prezent wręczę Ci już osobiście, kiedy się wreszcie zobaczymy!</small>"
+            }
+        ];
+
+        function renderCards() {
+            const container = document.getElementById('grid-container');
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            container.innerHTML = '';
+
+            levels.forEach(lvl => {
+                const isUnlocked = todayStr >= lvl.unlockDate;
+                const card = document.createElement('div');
+                card.className = `card ${isUnlocked ? 'active' : 'locked'}`;
+                
+                if (lvl.id === 6 && isUnlocked) {
+                    card.style.borderColor = 'var(--accent)';
+                }
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="card-step">POZIOM ${lvl.id}</span>
+                        <span class="card-icon">${isUnlocked ? lvl.icon : '🔒'}</span>
+                    </div>
+                    <div class="card-title">${isUnlocked ? lvl.title : 'Zablokowane'}</div>
+                    <div class="card-desc">${isUnlocked ? lvl.desc : 'Ta karta odblokuje się wkrótce.'}</div>
+                    ${!isUnlocked ? `<div class="lock-timer">Dostępne: ${lvl.dateLabel}</div>` : ''}
+                `;
+
+                if (isUnlocked) {
+                    card.onclick = () => openModal(lvl.id);
+                }
+
+                container.appendChild(card);
+            });
+        }
+
+        function openModal(id) {
+            const lvl = levels.find(l => l.id === id);
+            if (lvl) {
+                document.getElementById('modal-title').innerHTML = lvl.title + ' ' + lvl.icon;
+                document.getElementById('modal-body').innerHTML = lvl.text;
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        renderCards();
+    </script>
+</body>
+</html>
