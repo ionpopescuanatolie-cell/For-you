@@ -288,7 +288,7 @@
             container.innerHTML = '';
 
             levels.forEach(lvl => {
-                const isUnlocked = todayStr >= lvl.unlockDate;
+                const isUnlocked = true;
                 const card = document.createElement('div');
                 card.className = `card ${isUnlocked ? 'active' : 'locked'}`;
                 
