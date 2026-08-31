@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>6 Miesięcy Wspomnień, 6 Dni do Sekretu</title>
+    <title>6 Miesięcy Wspomnień, 6 Dni do Niespodzianki</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -20,27 +20,27 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            padding: 20px 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px 15px;
         }
 
         header {
             text-align: center;
-            max-width: 600px;
             margin-bottom: 25px;
+            max-width: 600px;
         }
 
         .badge {
-            background: rgba(236, 72, 153, 0.15);
+            background-color: rgba(236, 72, 153, 0.15);
             color: var(--accent);
             padding: 6px 14px;
             border-radius: 20px;
@@ -48,18 +48,18 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border: 1px solid rgba(236, 72, 153, 0.3);
             display: inline-block;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(236, 72, 153, 0.3);
         }
 
         h1 {
             font-size: 1.6rem;
-            font-weight: 700;
             margin-bottom: 8px;
+            color: var(--text-main);
         }
 
-        p.subtitle {
+        .subtitle {
             color: var(--text-muted);
             font-size: 0.95rem;
             line-height: 1.4;
@@ -67,141 +67,151 @@
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 15px;
             width: 100%;
-            max-width: 500px;
-            margin-top: 10px;
-        }
-
-        @media (min-width: 480px) {
-            .grid { grid-template-columns: repeat(2, 1fr); }
-            .grid .card:last-child { grid-column: span 2; }
+            max-width: 700px;
         }
 
         .card {
-            background: var(--card-bg);
+            background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 16px;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: relative;
             overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
         }
 
-        .card.active:hover {
+        .card.unlocked {
+            cursor: pointer;
+            border-color: rgba(236, 72, 153, 0.4);
+        }
+
+        .card.unlocked:hover {
+            transform: translateY(-3px);
             border-color: var(--accent);
-            transform: translateY(-2px);
         }
 
         .card.locked {
-            background: var(--locked-bg);
-            border-color: #1e293b;
-            opacity: 0.6;
-            cursor: not-allowed;
+            opacity: 0.75;
+            background-color: var(--locked-bg);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .card-step {
             font-size: 0.75rem;
             font-weight: 700;
             color: var(--accent);
-        }
-
-        .card.locked .card-step {
-            color: var(--text-muted);
+            letter-spacing: 1px;
         }
 
         .card-icon {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .card-desc {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 12px;
         }
 
         .lock-timer {
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: #f59e0b;
-            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 10px;
+            border-radius: 6px;
+            width: fit-content;
         }
 
+        /* Modal */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            z-index: 100;
+            z-index: 1000;
+            padding: 15px;
         }
 
         .modal-content {
-            background: var(--card-bg);
+            background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            max-width: 450px;
-            width: 100%;
             padding: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
             position: relative;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
 
         .close-btn {
             position: absolute;
-            top: 15px; right: 15px;
+            top: 15px;
+            right: 15px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             cursor: pointer;
+            line-height: 1;
         }
 
         .modal-title {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
             color: var(--accent);
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-right: 25px;
         }
 
         .modal-body {
             font-size: 0.95rem;
             line-height: 1.6;
-            color: #cbd5e1;
-            margin-bottom: 20px;
+            color: var(--text-main);
         }
 
-        .gift-box {
-            background: #0f172a;
-            border: 2px dashed var(--accent);
-            padding: 15px;
+        .modal-body h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 12px;
+        }
+
+        .modal-body img {
+            width: 100%;
             border-radius: 10px;
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .gift-code {
-            font-family: monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-top: 5px;
+            margin: 10px 0;
+            border: 1px solid var(--border);
         }
     </style>
 </head>
@@ -209,8 +219,8 @@
 
     <header>
         <span class="badge">Tajny Projekt</span>
-        <h1>6 Miesięcy Wspomnień, 6 Dni do Sekretu</h1>
-        <p class="subtitle">15 września – 21 września: Każdego dnia odblokowuje się jeden poziom!</p>
+        <h1>6 Miesięcy Wspomnień, 6 Dni do Niespodzianki</h1>
+        <p class="subtitle">15 września – 20 września | Odliczanie krok po kroku</p>
     </header>
 
     <div class="grid" id="grid-container"></div>
@@ -218,91 +228,90 @@
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">&times;</button>
-            <h2 class="modal-title" id="modal-title">Tytuł</h2>
-            <div class="modal-body" id="modal-body">Treść...</div>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <div class="modal-body" id="modal-body"></div>
         </div>
     </div>
 
     <script>
-const levels = [
-    {
-        id: 1,
-        unlockDate: "2026-09-15",
-        title: "Wszystko zaczęło się od gry",
-        subtitle: "15 września — Dzień 1",
-        shortDesc: "Jedna wiadomość z 15 marca, która zmieniła wszystko...",
-        icon: "🎮",
-        content: `
-            <h3>Nasze początki: 15 Marca</h3>
-            <p>Wszystko zaczęło się 15 marca od zwykłej gry w Palmon. Napisałem do Ciebie z propozycją fuzji naszych sojuszy, szczerze myśląc, że to tylko kolejny zwykły moment w grze.</p>
-            
-            <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width:100%; height:auto; margin: 15px 0; border-radius: 8px; border: 2px solid var(--border);">
-            
-            <p>Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️</p>
-        `
-    },
-    {
-        id: 2,
-        unlockDate: "2026-09-16",
-        title: "Dzień 2",
-        subtitle: "16 września — Dzień 2",
-        shortDesc: "Kolejne wspólne wspomnienie...",
-        icon: "💬",
-        content: `
-            <h3>Dzień 2</h3>
-            <p>Tutaj dodamy Twoje drugie wspomnienie lub historię.</p>
-        `
-    },
-    {
-        id: 3,
-        unlockDate: "2026-09-17",
-        title: "Dzień 3",
-        subtitle: "17 września — Dzień 3",
-        shortDesc: "Kolejny krok w naszej historii...",
-        icon: "✨",
-        content: `
-            <h3>Dzień 3</h3>
-            <p>Tutaj dodamy Twoje trzecie wspomnienie.</p>
-        `
-    },
-    {
-        id: 4,
-        unlockDate: "2026-09-18",
-        title: "Dzień 4",
-        subtitle: "18 września — Dzień 4",
-        shortDesc: "Wspólne chwile...",
-        icon: "⭐",
-        content: `
-            <h3>Dzień 4</h3>
-            <p>Tutaj dodamy Twoje czwarte wspomnienie.</p>
-        `
-    },
-    {
-        id: 5,
-        unlockDate: "2026-09-19",
-        title: "Dzień 5",
-        subtitle: "19 września — Dzień 5",
-        shortDesc: "Już prawie na miejscu...",
-        icon: "🌟",
-        content: `
-            <h3>Dzień 5</h3>
-            <p>Tutaj dodamy Twoje piąte wspomnienie.</p>
-        `
-    },
-    {
-        id: 6,
-        unlockDate: "2026-09-20",
-        title: "Finał",
-        subtitle: "20 września — Dzień 6",
-        shortDesc: "Główny prezent i niespodzianka!",
-        icon: "🎁",
-        content: `
-            <h3>Wszystkiego najlepszego!</h3>
-            <p>Finałowa wiadomość i niespodzianka dla Natalii.</p>
-        `
-    }
-];
-
+        const levels = [
+            {
+                id: 1,
+                unlockDate: "2026-09-15",
+                title: "Wszystko zaczęło się od gry",
+                subtitle: "15 września — Dzień 1",
+                shortDesc: "Jedna wiadomość z 15 marca, która zmieniła wszystko...",
+                icon: "🎮",
+                content: `
+                    <h3>Nasze początki: 15 Marca</h3>
+                    <p>Wszystko zaczęło się 15 marca od zwykłej gry w Palmon. Napisałem do Ciebie z propozycją fuzji naszych sojuszy, szczerze myśląc, że to tylko kolejny zwykły moment w grze.</p>
+                    
+                    <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon">
+                    
+                    <p>Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️</p>
+                `
+            },
+            {
+                id: 2,
+                unlockDate: "2026-09-16",
+                title: "Dzień 2",
+                subtitle: "16 września — Dzień 2",
+                shortDesc: "Kolejne wspólne wspomnienie...",
+                icon: "💬",
+                content: `
+                    <h3>Dzień 2</h3>
+                    <p>Tutaj dodamy Twoje drugie wspomnienie lub historię.</p>
+                `
+            },
+            {
+                id: 3,
+                unlockDate: "2026-09-17",
+                title: "Dzień 3",
+                subtitle: "17 września — Dzień 3",
+                shortDesc: "Kolejny krok w naszej historii...",
+                icon: "✨",
+                content: `
+                    <h3>Dzień 3</h3>
+                    <p>Tutaj dodamy Twoje trzecie wspomnienie.</p>
+                `
+            },
+            {
+                id: 4,
+                unlockDate: "2026-09-18",
+                title: "Dzień 4",
+                subtitle: "18 września — Dzień 4",
+                shortDesc: "Wspólne chwile...",
+                icon: "⭐",
+                content: `
+                    <h3>Dzień 4</h3>
+                    <p>Tutaj dodamy Twoje czwarte wspomnienie.</p>
+                `
+            },
+            {
+                id: 5,
+                unlockDate: "2026-09-19",
+                title: "Dzień 5",
+                subtitle: "19 września — Dzień 5",
+                shortDesc: "Już prawie na miejscu...",
+                icon: "🌟",
+                content: `
+                    <h3>Dzień 5</h3>
+                    <p>Tutaj dodamy Twoje piąte wspomnienie.</p>
+                `
+            },
+            {
+                id: 6,
+                unlockDate: "2026-09-20",
+                title: "Finał",
+                subtitle: "20 września — Dzień 6",
+                shortDesc: "Główny prezent i niespodzianka!",
+                icon: "🎁",
+                content: `
+                    <h3>Wszystkiego najlepszego!</h3>
+                    <p>Finałowa wiadomość i niespodzianka dla Natalii.</p>
+                `
+            }
+        ];
 
         function renderCards() {
             const container = document.getElementById('grid-container');
@@ -311,10 +320,13 @@ const levels = [
             container.innerHTML = '';
 
             levels.forEach(lvl => {
+                // ТЕСТОВЫЙ РЕЖИМ: true открывает все карточки для проверки.
+                // Перед отправкой замени true обратно на: todayStr >= lvl.unlockDate
                 const isUnlocked = true;
-                const card = document.createElement('div');
-                card.className = `card ${isUnlocked ? 'active' : 'locked'}`;
                 
+                const card = document.createElement('div');
+                card.className = `card ${isUnlocked ? 'unlocked' : 'locked'}`;
+
                 if (lvl.id === 6 && isUnlocked) {
                     card.style.borderColor = 'var(--accent)';
                 }
@@ -325,8 +337,8 @@ const levels = [
                         <span class="card-icon">${isUnlocked ? lvl.icon : '🔒'}</span>
                     </div>
                     <div class="card-title">${isUnlocked ? lvl.title : 'Zablokowane'}</div>
-                    <div class="card-desc">${isUnlocked ? lvl.desc : 'Ta karta odblokuje się wkrótce.'}</div>
-                    ${!isUnlocked ? `<div class="lock-timer">Dostępne: ${lvl.dateLabel}</div>` : ''}
+                    <div class="card-desc">${isUnlocked ? lvl.shortDesc : 'Odblokuje się ' + lvl.unlockDate}</div>
+                    ${!isUnlocked ? `<div class="lock-timer">🔒 Dostępne od ${lvl.unlockDate}</div>` : ''}
                 `;
 
                 if (isUnlocked) {
@@ -339,11 +351,11 @@ const levels = [
 
         function openModal(id) {
             const lvl = levels.find(l => l.id === id);
-            if (lvl) {
-                document.getElementById('modal-title').innerHTML = lvl.title + ' ' + lvl.icon;
-                document.getElementById('modal-body').innerHTML = lvl.text;
-                document.getElementById('modal').style.display = 'flex';
-            }
+            if (!lvl) return;
+
+            document.getElementById('modal-title').innerText = lvl.subtitle;
+            document.getElementById('modal-body').innerHTML = lvl.content;
+            document.getElementById('modal').style.display = 'flex';
         }
 
         function closeModal() {
@@ -352,7 +364,7 @@ const levels = [
 
         window.onclick = function(event) {
             const modal = document.getElementById('modal');
-            if (event.target == modal) {
+            if (event.target === modal) {
                 closeModal();
             }
         }
