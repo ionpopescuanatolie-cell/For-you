@@ -224,69 +224,85 @@
     </div>
 
     <script>
-        const levels = [
-         {
-    id: 1,
-    unlockDate: "2026-09-15",
-    title: "Wszystko zaczęło się od gry",
-    subtitle: "15 września — Dzień 1",
-    shortDesc: "Jedna propozycja fuzji, która zmieniła wszystko...",
-    icon: "🎮",
-    content: `
-        <h3>Nasze początki: Fuzja serc</h3>
-        <p>Wszystko zaczęło się od zwykłej gry w Palmon. Napisałem do Ciebie po prostu z propozycją fuzji, szczerze myśląc, że to tylko kolejny zwykły moment w grze.</p>
-        
-        <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width:100%; height:auto; margin: 15px 0; border-radius: 8px; border: 2px solid var(--border);">
-        
-        <p>Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️</p>
-    `
-            },
-            {
-                id: 2,
-                unlockDate: "2026-09-16",
-                dateLabel: "16 Września",
-                icon: "🎵",
-                title: "Nasza Muzyka",
-                desc: "Utwory, które przypominają mi o Tobie.",
-                text: "Muzyka, która przypomina mi o Tobie i naszych wieczornych rozmowach:<br><br>1. <i>Gibbs - Między ciszą a krzykiem</i><br>2. Twoja ulubiona melodia...<br><br>Muzyka łączy nas niezależnie od kilometrów!"
-            },
-            {
-                id: 3,
-                unlockDate: "2026-09-17",
-                dateLabel: "17 Września",
-                icon: "📍",
-                title: "Mapa Naszych Miejsc",
-                desc: "Miejsca, do których pójdziemy razem.",
-                text: "Kiedy wreszcie do Ciebie przyjadę, koniecznie musimy:<br>• Wybrać się na spacer nad Jezioro Białe w Okunince.<br>• Pójść na najlepszą kawę we Włodawie.<br>• Wybrać się całą trójką z Twoim synem na super wycieczkę!"
-            },
-            {
-                id: 4,
-                unlockDate: "2026-09-18",
-                dateLabel: "18 Września",
-                icon: "✨",
-                title: "6 Powodów",
-                desc: "Za co najbardziej Cię cenię.",
-                text: "Dlaczego jesteś dla mnie tak wyjątkowa:<br>1. Twój uśmiech i poczucie humoru.<br>2. Twoja troska i ciepłe serce.<br>3. To, jak wspaniałą jesteś mamą.<br>4. Twój głos, który potrafi poprawić mi każdy dzień.<br>5. Twoja szczerość.<br>6. Po prostu to, że jesteś."
-            },
-            {
-                id: 5,
-                unlockDate: "2026-09-19",
-                dateLabel: "19 Września",
-                icon: "📝",
-                title: "Plan na Przyszłość",
-                desc: "Co nas czeka dalej.",
-                text: "Co nas czeka w kolejnych 6 miesiącach:<br>✅ Spotkać się na żywo i wreszcie się przytulić.<br>✅ Zrobić nasze pierwsze wspólne zdjęcie.<br>✅ Wręczyć Ci główny prezent osobiście w Twoich rękach."
-            },
-            {
-                id: 6,
-                unlockDate: "2026-09-21",
-                dateLabel: "21 Września (Dzień Urodzin!)",
-                icon: "🎁",
-                title: "Prezent Urodzinowy",
-                desc: "Odbierz swój niespodziankowy prezent!",
-                text: "Wszystkiego Najlepszego! 21 września — Twój wyjątkowy dzień! Chociaż dzieli nas odległość, chcę, abyś dzisiaj poczuła się wyjątkowo. To mały prezent ode mnie dla Ciebie!<br><div class=\"gift-box\">Voucher:<br><div class=\"gift-code\">Karta Podarunkowa Allegro (500 PLN)</div></div><br><small>*A główny, osobisty prezent wręczę Ci już osobiście, kiedy się wreszcie zobaczymy!</small>"
-            }
-        ];
+const levels = [
+    {
+        id: 1,
+        unlockDate: "2026-09-15",
+        title: "Wszystko zaczęło się od gry",
+        subtitle: "15 września — Dzień 1",
+        shortDesc: "Jedna wiadomość z 15 marca, która zmieniła wszystko...",
+        icon: "🎮",
+        content: `
+            <h3>Nasze początki: 15 Marca</h3>
+            <p>Wszystko zaczęło się 15 marca od zwykłej gry w Palmon. Napisałem do Ciebie z propozycją fuzji naszych sojuszy, szczerze myśląc, że to tylko kolejny zwykły moment w grze.</p>
+            
+            <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width:100%; height:auto; margin: 15px 0; border-radius: 8px; border: 2px solid var(--border);">
+            
+            <p>Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️</p>
+        `
+    },
+    {
+        id: 2,
+        unlockDate: "2026-09-16",
+        title: "Dzień 2",
+        subtitle: "16 września — Dzień 2",
+        shortDesc: "Kolejne wspólne wspomnienie...",
+        icon: "💬",
+        content: `
+            <h3>Dzień 2</h3>
+            <p>Tutaj dodamy Twoje drugie wspomnienie lub historię.</p>
+        `
+    },
+    {
+        id: 3,
+        unlockDate: "2026-09-17",
+        title: "Dzień 3",
+        subtitle: "17 września — Dzień 3",
+        shortDesc: "Kolejny krok w naszej historii...",
+        icon: "✨",
+        content: `
+            <h3>Dzień 3</h3>
+            <p>Tutaj dodamy Twoje trzecie wspomnienie.</p>
+        `
+    },
+    {
+        id: 4,
+        unlockDate: "2026-09-18",
+        title: "Dzień 4",
+        subtitle: "18 września — Dzień 4",
+        shortDesc: "Wspólne chwile...",
+        icon: "⭐",
+        content: `
+            <h3>Dzień 4</h3>
+            <p>Tutaj dodamy Twoje czwarte wspomnienie.</p>
+        `
+    },
+    {
+        id: 5,
+        unlockDate: "2026-09-19",
+        title: "Dzień 5",
+        subtitle: "19 września — Dzień 5",
+        shortDesc: "Już prawie na miejscu...",
+        icon: "🌟",
+        content: `
+            <h3>Dzień 5</h3>
+            <p>Tutaj dodamy Twoje piąte wspomnienie.</p>
+        `
+    },
+    {
+        id: 6,
+        unlockDate: "2026-09-20",
+        title: "Finał",
+        subtitle: "20 września — Dzień 6",
+        shortDesc: "Główny prezent i niespodzianka!",
+        icon: "🎁",
+        content: `
+            <h3>Wszystkiego najlepszego!</h3>
+            <p>Finałowa wiadomość i niespodzianka dla Natalii.</p>
+        `
+    }
+];
+
 
         function renderCards() {
             const container = document.getElementById('grid-container');
