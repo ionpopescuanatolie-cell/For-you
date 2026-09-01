@@ -251,18 +251,114 @@
                     <p>Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️</p>
                 `
             },
-            {
+                        {
                 id: 2,
                 unlockDate: "2026-09-16",
-                title: "Dzień 2",
+                title: "Galeria Naszych Chwil",
                 subtitle: "16 września — Dzień 2",
-                shortDesc: "Kolejne wspólne wspomnienie...",
-                icon: "💬",
+                shortDesc: "Moje zdjęcia, które do Ciebie wysyłałem...",
+                icon: "📸",
                 content: `
-                    <h3>Dzień 2</h3>
-                    <p>Tutaj dodamy Twoje drugie wspomnienie lub historię.</p>
+                    <h3>Moje zdjęcia dla Ciebie</h3>
+                    <p>Przez ten cały czas wysyłałem Ci różne zdjęcia. Oto mała historia kryjąca się za każdym z nich:</p>
+                    
+                    <div class="slider-container">
+                        <div class="slide active">
+                            <img src="N1.jpg" alt="Zdjęcie 1">
+                            <div class="slide-caption">Moje pierwsze wysłane do Ciebie zdjęcie. Bardzo się denerwowałem, że Ci się nie spodobam, ale...</div>
+                        </div>
+                        <div class="slide">
+                            <img src="I1.jpg" alt="Screen 1">
+                            <div class="slide-caption">...odpowiedziałaś mi w ten sposób: „Jesteś przystojny i masz ładne oczy 😍”! ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N2.jpg" alt="Zdjęcie 2">
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie było mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N3.jpg" alt="Zdjęcie 3">
+                            <div class="slide-caption">Kolejny kadr z Włoch — piękne widoki, ale moje myśli i tak uciekały tylko do Ciebie.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N4.jpg" alt="Zdjęcie 4">
+                            <div class="slide-caption">Pamiętam, jak na tym zdjęciu szukałem ładowarki, bo bez Ciebie czas płynie tak ciężko i czuję się, jakby brakowało mi powietrza.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N5.jpg" alt="Zdjęcie 5">
+                            <div class="slide-caption">Tak bardzo polubiłem Twoje reakcje na moje zdjęcia, że sam zacząłem chcieć robić ich dla Ciebie coraz więcej.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N6.jpg" alt="Zdjęcie 6">
+                            <div class="slide-caption">A to ja z brodą XD</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N7.jpg" alt="Zdjęcie 7">
+                            <div class="slide-caption">Ahahaah, a to ja ogolony XD</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N8.jpg" alt="Zdjęcie 8">
+                            <div class="slide-caption">A to ja, kiedy znowu stęskniłem się za Twoją reakcją :p</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N9.jpg" alt="Zdjęcie 9">
+                            <div class="slide-caption">Tęsknię za Tobą każdego dnia... ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N10.jpg" alt="Zdjęcie 10">
+                            <div class="slide-caption">To tak, żeby nie było aż tak poważnie :D</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N11.jpg" alt="Zdjęcie 11">
+                            <div class="slide-caption">Z każdym zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N12.jpg" alt="Zdjęcie 12">
+                            <div class="slide-caption">W każdej chwili na tych zdjęciach myślę o Tobie — o mojej wspaniałej dziewczynie.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N13.jpg" alt="Zdjęcie 13">
+                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace paki i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie na pace i po prostu rozmawiali o wszystkim.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N14.jpg" alt="Zdjęcie 14">
+                            <div class="slide-caption">A to ja o krok bliżej do Ciebie, moja miłości &lt;3</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N15.jpg" alt="Zdjęcie 15">
+                            <div class="slide-caption">Chyba oszalałem tu z miłości do Ciebie ahaha xd</div>
+                        </div>
+                        
+                        <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                        <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+                    </div>
+                    
+                    <div class="slider-dots">
+                        <span class="dot active" onclick="setSlide(0)"></span>
+                        <span class="dot" onclick="setSlide(1)"></span>
+                        <span class="dot" onclick="setSlide(2)"></span>
+                        <span class="dot" onclick="setSlide(3)"></span>
+                        <span class="dot" onclick="setSlide(4)"></span>
+                        <span class="dot" onclick="setSlide(5)"></span>
+                        <span class="dot" onclick="setSlide(6)"></span>
+                        <span class="dot" onclick="setSlide(7)"></span>
+                        <span class="dot" onclick="setSlide(8)"></span>
+                        <span class="dot" onclick="setSlide(9)"></span>
+                        <span class="dot" onclick="setSlide(10)"></span>
+                        <span class="dot" onclick="setSlide(11)"></span>
+                        <span class="dot" onclick="setSlide(12)"></span>
+                        <span class="dot" onclick="setSlide(13)"></span>
+                        <span class="dot" onclick="setSlide(14)"></span>
+                        <span class="dot" onclick="setSlide(15)"></span>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border: 1px dashed var(--accent); border-radius: 10px; text-align: center;">
+                        <p style="margin: 0; font-style: italic; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;">
+                            Kocham Cię. Wiem, że zapisujesz moje zdjęcia i tak bardzo chciałbym być obok Ciebie, a nie być tylko zdjęciem w Twoim telefonie... ❤️
+                        </p>
+                    </div>
                 `
             },
+
             {
                 id: 3,
                 unlockDate: "2026-09-17",
