@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev Hub | Game Mechanics Showcase</title>
+    <title>Dla Mojej Mołdawskiej Księżniczki ❤️</title>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
+            --accent: #ec4899;
+            --accent-hover: #f43f5e;
             --text: #f8fafc;
             --text-muted: #94a3b8;
         }
@@ -57,7 +57,7 @@
 
         .card {
             background: var(--card-bg);
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            border: 1px solid rgba(236, 72, 153, 0.3);
             border-radius: 16px;
             padding: 20px;
             cursor: pointer;
@@ -74,7 +74,7 @@
 
         .card-icon {
             font-size: 2.5rem;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(236, 72, 153, 0.1);
             padding: 12px;
             border-radius: 12px;
         }
@@ -102,7 +102,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
@@ -125,7 +125,7 @@
             overflow-y: auto;
             padding: 25px;
             position: relative;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
         }
 
         .close-btn {
@@ -179,7 +179,7 @@
             position: absolute;
             top: 40%;
             transform: translateY(-50%);
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.5);
             color: white;
             border: none;
             padding: 10px 15px;
@@ -216,8 +216,8 @@
 <body>
 
     <header>
-        <h1> Dev Engine & Mechanics Showcase</h1>
-        <p>Тестирование интерфейсов, алгоритмов и адаптивных галерей</p>
+        <h1>Dla Mojej Najdroższej ❤️</h1>
+        <p>Małe niespodzianki każdego dnia...</p>
     </header>
 
     <div class="grid" id="cardsGrid"></div>
@@ -235,96 +235,100 @@
             {
                 id: 1,
                 unlockDate: "2026-09-15",
-                title: "Dev Log: Архитектура и базы данных",
-                subtitle: "Модуль 01 — Игровой движок",
-                shortDesc: "Лог изменений, интеграция игрового сервера и скриншоты интерфейса.",
+                title: "Wszystko zaczęło się od gry",
+                subtitle: "15 września — Dzień 1",
+                shortDesc: "Jedna propozycja fuzji, która zmieniła wszystko...",
                 icon: "🎮",
                 content: `
-                    <h3>Логирование игровой механики</h3>
-                    <p style="line-height: 1.6; margin-top: 10px; font-size: 0.9rem;">
-                        Тестирование взаимодействия между сервером и клиентом. Первичная отладка таблицы кланов, гильдий и структуры альянсов.
+                    <h3>Nasze początki: Fuzja serc</h3>
+                    <p style="line-height: 1.6; margin-top: 10px;">
+                        Wszystko zaczęło się od zwykłej gry w Palmon. Napisałem do Ciebie po prostu z propozycją fuzji, szczerze myśląc, że to tylko kolejny zwykły moment w grze.
                     </p>
                     
                     <div style="text-align: center; margin: 15px 0;">
-                        <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Скриншот теста" style="max-width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--accent);">
+                        <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--accent);">
                     </div>
                     
-                    <p style="line-height: 1.6; font-style: italic; color: #94a3b8; text-align: center; font-size: 0.85rem;">
-                        *Скриншот снят во время отладки сетевых протоколов и коллизий UI.
+                    <p style="line-height: 1.6; font-style: italic; color: #f8fafc; text-align: center;">
+                        Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️
                     </p>
                 `
             },
             {
                 id: 2,
                 unlockDate: "2026-09-16",
-                title: "Архив визуальных ресурсов",
-                subtitle: "Модуль 02 — Слайдер галереи",
-                shortDesc: "Тест рендеринга графических фреймов и адаптивных текстур.",
+                title: "Galeria Naszych Chwil",
+                subtitle: "16 września — Dzień 2",
+                shortDesc: "Moje zdjęcia, które do Ciebie wysyłałem...",
                 icon: "📸",
                 content: `
-                    <h3>Галерея тестовых кадров (Assets)</h3>
-                    <p style="font-size: 0.9rem;">Проверка оптимизации и скорости загрузки различных графических ресурсов:</p>
+                    <h3>Moje zdjęcia dla Ciebie</h3>
+                    <p>Przez ten cały czas wysyłałem Ci różne zdjęcia. Oto mała historia kryjąca się za każdym z nich:</p>
                     
                     <div class="slider-container">
                         <div class="slide active">
-                            <img src="N1.jpg" alt="Фрейм 1">
-                            <div class="slide-caption">Кадр #01: Проверка экспорта графики и цветового баланса.</div>
+                            <img src="N1.jpg" alt="Zdjęcie 1">
+                            <div class="slide-caption">Moje pierwsze wysłane do Ciebie zdjęcie. Bardzo się denerwowałem, że Ci się nie spodobam, ale...</div>
                         </div>
                         <div class="slide">
-                            <img src="I1.jpg" alt="Фрейм 2">
-                            <div class="slide-caption">Кадр #02: Скриншот из интерфейса отладки.</div>
+                            <img src="I1.jpg" alt="Screen 1">
+                            <div class="slide-caption">...odpowiedziałaś mi w ten sposób: „Jesteś przystojny i masz ładne oczy 😍”! ❤️</div>
                         </div>
                         <div class="slide">
-                            <img src="N2.jpg" alt="Фрейм 3">
-                            <div class="slide-caption">Кадр #03: Тест постобработки освещения (Сцена 1).</div>
+                            <img src="N2.jpg" alt="Zdjęcie 2">
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie было mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
                         </div>
                         <div class="slide">
-                            <img src="N3.jpg" alt="Фрейм 4">
-                            <div class="slide-caption">Кадр #04: Тест постобработки освещения (Сцена 2).</div>
+                            <img src="N3.jpg" alt="Zdjęcie 3">
+                            <div class="slide-caption">Kolejny kadr z Włoch — piękne widoki, ale moje myśli i tak uciekały tylko do Ciebie.</div>
                         </div>
                         <div class="slide">
-                            <img src="N4.jpg" alt="Фрейм 5">
-                            <div class="slide-caption">Кадр #05: Проверка контрастности при дневном освещении.</div>
+                            <img src="N4.jpg" alt="Zdjęcie 4">
+                            <div class="slide-caption">Pamiętam, jak na tym zdjęciu szukałem ładowarki, bo bez Ciebie czas płynie tak ciężko i czuję się, jakby brakowało mi powietrza.</div>
                         </div>
                         <div class="slide">
-                            <img src="N5.jpg" alt="Фрейм 6">
-                            <div class="slide-caption">Кадр #06: Тест рендеринга портретных ракурсов.</div>
+                            <img src="N5.jpg" alt="Zdjęcie 5">
+                            <div class="slide-caption">Tak bardzo polubiłem Twoje reakcje na moje zdjęcia, że sam zacząłem chcieć robić ich dla Ciebie coraz więcej.</div>
                         </div>
                         <div class="slide">
-                            <img src="N6.jpg" alt="Фрейм 7">
-                            <div class="slide-caption">Кадр #07: Вариант шейдера #1 (Борода).</div>
+                            <img src="N6.jpg" alt="Zdjęcie 6">
+                            <div class="slide-caption">A to ja z brodą XD</div>
                         </div>
                         <div class="slide">
-                            <img src="N7.jpg" alt="Фрейм 8">
-                            <div class="slide-caption">Кадр #08: Вариант шейдера #2 (Гладкий рендер).</div>
+                            <img src="N7.jpg" alt="Zdjęcie 7">
+                            <div class="slide-caption">Ahahaah, a to ja ogolony XD</div>
                         </div>
                         <div class="slide">
-                            <img src="N8.jpg" alt="Фрейм 9">
-                            <div class="slide-caption">Кадр #09: Проверка соотношения сторон (Aspect Ratio).</div>
+                            <img src="N8.jpg" alt="Zdjęcie 8">
+                            <div class="slide-caption">A to ja, kiedy znowu stęskniłem się za Twoją reakcją :p</div>
                         </div>
                         <div class="slide">
-                            <img src="N9.jpg" alt="Фрейм 10">
-                            <div class="slide-caption">Кадр #10: Тестирование динамического фокуса.</div>
+                            <img src="N9.jpg" alt="Zdjęcie 9">
+                            <div class="slide-caption">Tęsknię za Tobą każdego dnia... ❤️</div>
                         </div>
                         <div class="slide">
-                            <img src="N10.jpg" alt="Фрейм 11">
-                            <div class="slide-caption">Кадр #11: Тест юмора в разработческом логе :D</div>
+                            <img src="N10.jpg" alt="Zdjęcie 10">
+                            <div class="slide-caption">To tak, żeby nie było aż tak poważnie :D</div>
                         </div>
                         <div class="slide">
-                            <img src="N11.jpg" alt="Фрейм 12">
-                            <div class="slide-caption">Кадр #12: Проверка сжатия без потери качества.</div>
+                            <img src="N11.jpg" alt="Zdjęcie 11">
+                            <div class="slide-caption">Z każdym zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
                         </div>
                         <div class="slide">
-                            <img src="N13.jpg" alt="Фрейм 14">
-                            <div class="slide-caption">Кадр #14: Тестирование съемки в условиях открытой местности.</div>
+                            <img src="N12.jpg" alt="Zdjęcie 12">
+                            <div class="slide-caption">W każdej chwili na tych zdjęciach myślę o Tobie — o mojej wspaniałej dziewczynie.</div>
                         </div>
                         <div class="slide">
-                            <img src="N14.jpg" alt="Фрейм 15">
-                            <div class="slide-caption">Кадр #15: Финальная подгонка разрешения фрейма.</div>
+                            <img src="N13.jpg" alt="Zdjęcie 13">
+                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace paki i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie na pace i po prostu rozmawiali o wszystkim.</div>
                         </div>
                         <div class="slide">
-                            <img src="N15.jpg" alt="Фрейм 16">
-                            <div class="slide-caption">Кадр #16: Стресс-тест генерации ресурсов.</div>
+                            <img src="N14.jpg" alt="Zdjęcie 14">
+                            <div class="slide-caption">A to ja o krok bliżej do Ciebie, moja miłości &lt;3</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N15.jpg" alt="Zdjęcie 15">
+                            <div class="slide-caption">Chyba oszalałem tu z miłości do Ciebie ahaha xd</div>
                         </div>
                         
                         <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
@@ -350,9 +354,9 @@
                         <span class="dot" onclick="setSlide(15)"></span>
                     </div>
 
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(59, 130, 246, 0.1); border: 1px dashed var(--accent); border-radius: 10px; text-align: center;">
-                        <p style="margin: 0; color: #f8fafc; font-size: 0.85rem; line-height: 1.5;">
-                            Все фреймы успешно обработаны и скомпилированы в билд.
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border: 1px dashed var(--accent); border-radius: 10px; text-align: center;">
+                        <p style="margin: 0; font-style: italic; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;">
+                            Kocham Cię. Wiem, że zapisujesz moje zdjęcia i tak bardzo chciałbym być obok Ciebie, a nie być tylko zdjęciem w Twoim telefonie... ❤️
                         </p>
                     </div>
                 `
@@ -360,59 +364,59 @@
             {
                 id: 3,
                 unlockDate: "2026-09-17",
-                title: "Алгоритм поиска пути (Pathfinding)",
-                subtitle: "Модуль 03 — Интерактивный Canvas",
-                shortDesc: "Мини-игра на Canvas: тест сетки коллизий и навигации.",
+                title: "Droga do Ciebie",
+                subtitle: "17 września — Dzień 3",
+                shortDesc: "Poprowadź mnie przez labirynt do siebie...",
                 icon: "🧩",
                 content: `
-                    <h3>Тестирование алгоритма 2D-поиска пути</h3>
-                    <p style="text-align: center; font-size: 0.9rem; margin-bottom: 15px;">
-                        Доведите объект (🤖) до финишной точки (🏁), избегая блокирующих блоков сетки.
+                    <h3>Droga do Ciebie</h3>
+                    <p style="text-align: center; font-size: 0.95rem; margin-bottom: 15px;">
+                        Pomóż mi pokonać dystans! Poprowadź mnie od Mołdawii 🇲🇩 prosto do siebie do Polski 🇵🇱 ❤️
                     </p>
 
                     <!-- Игровое поле лабиринта -->
                     <div id="maze-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                         <canvas id="mazeCanvas" style="background: #1e293b; border: 2px solid var(--accent); border-radius: 12px; touch-action: none;"></canvas>
                         
-                        <!-- Кнопки управления -->
+                        <!-- Кнопки управления для мобильных устройств -->
                         <div style="display: grid; grid-template-columns: repeat(3, 50px); gap: 5px; margin-top: 10px;">
                             <div></div>
-                            <button onclick="movePlayer(0, -1)" style="padding: 12px; background: rgba(59,130,246,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬆️</button>
+                            <button onclick="movePlayer(0, -1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬆️</button>
                             <div></div>
-                            <button onclick="movePlayer(-1, 0)" style="padding: 12px; background: rgba(59,130,246,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬅️</button>
-                            <button onclick="movePlayer(0, 1)" style="padding: 12px; background: rgba(59,130,246,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬇️</button>
-                            <button onclick="movePlayer(1, 0)" style="padding: 12px; background: rgba(59,130,246,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">➡️</button>
+                            <button onclick="movePlayer(-1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬅️</button>
+                            <button onclick="movePlayer(0, 1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬇️</button>
+                            <button onclick="movePlayer(1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">➡️</button>
                         </div>
                     </div>
 
-                    <!-- Секция наград / достижений -->
+                    <!-- Секция с 6 сундучками/подарками -->
                     <div id="reward-section" style="display: none; margin-top: 20px; text-align: center;">
-                        <h4 style="color: #3b82f6; margin-bottom: 10px;">Тест пройден! Путь найден! 🎉</h4>
-                        <p style="font-size: 0.9rem; margin-bottom: 20px;">Разблокированы скрытые параметры сервера (нажмите для раскрытия):</p>
+                        <h4 style="color: #f43f5e; margin-bottom: 10px;">Pokonałaś dystans! Nareszcie jesteśmy razem! 🎉 ❤️</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 20px;">Otwórz każdy z 6 prezentów, które dla Ciebie przygotowałem:</p>
                         
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 1: FPS лимит снят')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Jesteś najbardziej niesamowitą dziewczyną na świecie! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 2: Пинг оптимизирован')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Twój uśmiech potrafi rozjaśnić mój najgorszy dzień ✨')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 3: Память очищена')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Każda chwila rozmowy z Tobą to dla mnie prezent 💖')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 4: Шейдеры загружены')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Uwielbiam sposób, w jaki na mnie patrzysz i jak się śmiejesz 🥰')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 5: Сетевой пак готов')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Nie mogę się doczekać, kiedy wreszcie będę mógł Cię mocno przytulić 🤗')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Модуль 6: Билд успешно собран!')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">📦</div>
+                            <div class="gift-box" onclick="openGift(this, 'Kocham Cię z całego serca i z każdym dniem coraz mocniej! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
                         </div>
@@ -421,6 +425,7 @@
             }
         ];
 
+        // Отрисовка карточек на странице
         function renderCards() {
             const grid = document.getElementById('cardsGrid');
             grid.innerHTML = '';
@@ -460,6 +465,7 @@
             document.getElementById('modalOverlay').classList.remove('active');
         }
 
+        // Логика слайдера для 2-го дня
         function moveSlide(direction) {
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.dot');
@@ -488,6 +494,7 @@
             if (dots[currentSlide]) dots[currentSlide].classList.add('active');
         }
 
+        // Логика лабиринта для 3-го дня
         let playerPos = { x: 0, y: 0 };
         const mazeGrid = [
             [0, 1, 0, 0, 0, 0],
@@ -519,6 +526,7 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Отрисовка стен
             for (let r = 0; r < mapSize; r++) {
                 for (let c = 0; c < mapSize; c++) {
                     if (mazeGrid[r][c] === 1) {
@@ -530,12 +538,12 @@
                 }
             }
 
-            // Финиш: 🏁
+            // Финиш: Польша 🇵🇱 + Она 👧
             ctx.font = `${cellSize * 0.4}px serif`;
-            ctx.fillText('🏁', (mapSize - 1) * cellSize + 8, (mapSize - 1) * cellSize + cellSize * 0.65);
+            ctx.fillText('🇵🇱👧', (mapSize - 1) * cellSize + 2, (mapSize - 1) * cellSize + cellSize * 0.65);
 
-            // Игрок: 🤖
-            ctx.fillText('🤖', playerPos.x * cellSize + 8, playerPos.y * cellSize + cellSize * 0.65);
+            // Игрок: Молдова 🇲🇩 + Ты 👦
+            ctx.fillText('🇲🇩👦', playerPos.x * cellSize + 2, playerPos.y * cellSize + cellSize * 0.65);
         }
 
         function movePlayer(dx, dy) {
@@ -561,11 +569,11 @@
         function openGift(element, message) {
             const icon = element.querySelector('.gift-icon');
             const text = element.querySelector('.gift-text');
-            icon.textContent = '⚡';
+            icon.textContent = '💖';
             text.textContent = message;
             text.style.display = 'block';
-            element.style.background = 'rgba(59, 130, 246, 0.2)';
-            element.style.borderColor = '#3b82f6';
+            element.style.background = 'rgba(236, 72, 153, 0.2)';
+            element.style.borderColor = '#f43f5e';
         }
 
         window.addEventListener('keydown', (e) => {
