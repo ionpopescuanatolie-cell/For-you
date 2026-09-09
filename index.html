@@ -492,6 +492,62 @@
             transform: scale(0.96);
         }
 
+        /* Day 6: Gift Voucher Styles */
+        .allegro-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #ff5a00;
+            border-radius: 16px;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(255, 90, 0, 0.25);
+        }
+
+        .allegro-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ff5a00;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .code-box {
+            background: #0f1721;
+            border: 2px dashed #ff5a00;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #38bdf8;
+            letter-spacing: 2px;
+            user-select: all;
+        }
+
+        .copy-btn {
+            background: #ff5a00;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
         .flying-emoji {
             position: absolute;
             font-size: 2.2rem;
@@ -807,6 +863,33 @@
                         </div>
                     </div>
                 `
+            },
+            {
+                id: 6,
+                unlockDate: "2026-09-20",
+                title: "Niespodzianka dla Ciebie!",
+                subtitle: "20 września — Dzień 6",
+                shortDesc: "Mały prezent na zakupy dla Mojej Księżniczki...",
+                icon: "🎁",
+                content: `
+                    <div class="allegro-card">
+                        <div class="allegro-logo">allegro</div>
+                        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;">Karta Podarunkowa Allegro 🎁</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
+                            Kup sobie coś pięknego, co sprawi Ci radość! Wybierz cokolwiek zechcesz — zasługujesz na wszystko, co najlepsze ❤️
+                        </p>
+
+                        <div class="code-box">
+                            <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Twój Kod Podarunkowy:</div>
+                            <div class="code-text" id="allegroCode">YgHp5qw5TgBP</div>
+                            <button class="copy-btn" id="copyBtn" onclick="copyAllegroCode()">Skopiuj kod 📋</button>
+                        </div>
+
+                        <div style="margin-top: 15px; font-size: 0.85rem; color: #f8fafc; font-style: italic;">
+                            Pamiętaj, że Twój uśmiech to mój ulubiony widok na świecie... Kocham Cię! ✨❤️
+                        </div>
+                    </div>
+                `
             }
         ];
 
@@ -870,6 +953,22 @@
                 clearInterval(tgChatTimer);
                 tgChatTimer = null;
             }
+        }
+
+        // Копирование кода Allegro для 6-го дня
+        function copyAllegroCode() {
+            const codeText = document.getElementById('allegroCode').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerText = 'Skopiowano! 🎉';
+                btn.style.background = '#22c55e';
+                setTimeout(() => {
+                    btn.innerText = 'Skopiuj kod 📋';
+                    btn.style.background = '#ff5a00';
+                }, 3000);
+            }).catch(err => {
+                alert('Kod: ' + codeText);
+            });
         }
 
         // Слайдер для 2-го дня
@@ -1101,7 +1200,6 @@
                 document.getElementById('tg-status').textContent = 'online';
                 document.getElementById('tg-status').style.color = '#22c55e';
                 
-                // Показываем кнопку печати/взрыва после последнего сообщения
                 setTimeout(() => {
                     document.getElementById('tg-bottom-bar').style.display = 'flex';
                 }, 1000);
@@ -1120,8 +1218,6 @@
                 
                 const msgWrapper = document.createElement('div');
                 msgWrapper.className = 'tg-msg-wrapper';
-                
-                const msgId = 'msg-' + tgMsgIdx;
                 
                 msgWrapper.innerHTML = `
                     <div class="tg-msg">
@@ -1145,7 +1241,6 @@
             }, 1200);
         }
 
-        // Добавление реакций прямо под сообщением (без ограничений)
         function addMsgReaction(btn, emoji) {
             const countEl = btn.querySelector('.count');
             let count = parseInt(countEl.textContent) || 0;
@@ -1154,7 +1249,6 @@
             btn.style.background = 'rgba(236, 72, 153, 0.25)';
             btn.style.borderColor = 'var(--accent)';
 
-            // Спавним вылетающий эмодзи
             const chatScreen = document.getElementById('tg-screen-chat');
             const flying = document.createElement('div');
             flying.className = 'flying-emoji';
@@ -1173,7 +1267,6 @@
             }, 1800);
         }
 
-        // Фонтан сердец, фейерверков и эмодзи при клике на кнопку снизу
         function triggerFireworks(event) {
             const chatScreen = document.getElementById('tg-screen-chat');
             const emojis = ['💖', '💗', '💓', '💞', '💘', '❤️', '❣️', '🥰', '😍', '😻', '💋', '🎉', '✨', '🎆'];
