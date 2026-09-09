@@ -516,6 +516,9 @@
     </div>
 
     <script>
+        // ВРЕМЕННЫЙ ФЛАГ ДЛЯ ТЕСТИРОВАНИЯ (true = разблокировать все)
+        const FORCE_UNLOCK_ALL = true;
+
         const cardsData = [
             {
                 id: 1,
@@ -809,6 +812,7 @@
 
         // Проверка доступности карточки по дате
         function isUnlocked(unlockDateStr) {
+            if (FORCE_UNLOCK_ALL) return true;
             const now = new Date();
             const todayStr = now.toISOString().split('T')[0];
             return todayStr >= unlockDateStr;
