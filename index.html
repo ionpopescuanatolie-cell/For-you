@@ -335,6 +335,7 @@
             flex-direction: column;
             height: 480px;
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
         }
 
         .tg-chat-header {
@@ -344,6 +345,7 @@
             align-items: center;
             gap: 12px;
             border-bottom: 1px solid rgba(0,0,0,0.3);
+            z-index: 2;
         }
 
         .tg-chat-header img {
@@ -351,6 +353,32 @@
             height: 42px;
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        .tg-pinned-msg {
+            background: #1e2c3a;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #64b5f6;
+            z-index: 2;
+        }
+
+        .tg-pinned-bar {
+            width: 3px;
+            height: 24px;
+            background: #64b5f6;
+            border-radius: 2px;
+        }
+
+        .tg-pinned-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #e2e8f0;
         }
 
         .tg-chat-body {
@@ -383,6 +411,43 @@
             color: #6c7883;
             text-align: right;
             margin-top: 4px;
+        }
+
+        .tg-reactions-bar {
+            background: #17212b;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            z-index: 2;
+        }
+
+        .tg-reaction-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tg-reaction-btn:hover {
+            background: rgba(236,72,153,0.2);
+            transform: scale(1.1);
+        }
+
+        .flying-emoji {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: flyUp 1.5s forwards ease-out;
+            z-index: 100;
+        }
+
+        @keyframes flyUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-250px) scale(1.5); }
         }
 
         @keyframes popIn {
@@ -454,7 +519,7 @@
                         </div>
                         <div class="slide">
                             <img src="N2.jpg" alt="Zdjęcie 2">
-                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie było mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie было mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
                         </div>
                         <div class="slide">
                             <img src="N3.jpg" alt="Zdjęcie 3">
@@ -490,7 +555,7 @@
                         </div>
                         <div class="slide">
                             <img src="N11.jpg" alt="Zdjęcie 11">
-                            <div class="slide-caption">Z każdym zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
+                            <div class="slide-caption">Z каждым zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
                         </div>
                         <div class="slide">
                             <img src="N12.jpg" alt="Zdjęcie 12">
@@ -612,7 +677,7 @@
 
                     <h3 style="text-align: center; margin-bottom: 5px;">Pytania do Mojej Najdroższej ✨</h3>
                     <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
-                        Odpowiedz na pytania ниже... Wybierz odpowiedź, która najbardziej Ci pasuje! 😉
+                        Odpowiedz na pytania poniżej... Wybierz odpowiedź, która najbardziej Ci pasuje! 😉
                     </p>
 
                     <div id="quiz-container">
@@ -666,7 +731,22 @@
                             </div>
                         </div>
 
+                        <div class="tg-pinned-msg">
+                            <div class="tg-pinned-bar"></div>
+                            <div>
+                                <div style="font-size: 0.7rem; color: #64b5f6; font-weight: bold;">Przypięta wiadomość</div>
+                                <div class="tg-pinned-text">Dla Mojej Najważniejszej Osoby na Świecie... ❤️</div>
+                            </div>
+                        </div>
+
                         <div id="tg-chat-messages" class="tg-chat-body"></div>
+
+                        <div class="tg-reactions-bar">
+                            <button class="tg-reaction-btn" onclick="sendReaction('❤️')">❤️</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('🔥')">🔥</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('🥰')">🥰</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('✨')">✨</button>
+                        </div>
                     </div>
                 `
             }
@@ -970,6 +1050,23 @@
                 tgMsgIdx++;
                 statusEl.textContent = 'online';
                 statusEl.style.color = '#22c55e';
+            }, 1500);
+        }
+
+        function sendReaction(emoji) {
+            const chatScreen = document.getElementById('tg-screen-chat');
+            const flying = document.createElement('div');
+            flying.className = 'flying-emoji';
+            flying.textContent = emoji;
+
+            const randomX = Math.random() * (chatScreen.clientWidth - 50) + 20;
+            flying.style.left = randomX + 'px';
+            flying.style.bottom = '60px';
+
+            chatScreen.appendChild(flying);
+
+            setTimeout(() => {
+                flying.remove();
             }, 1500);
         }
 
