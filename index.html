@@ -107,6 +107,24 @@
             color: var(--text-muted);
         }
 
+        /* Site Lock Overlay Styles */
+        .site-lock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -432,7 +450,6 @@
             margin-top: 4px;
         }
 
-        /* Inline Emoji Reactions Under Message */
         .msg-reactions-inline {
             display: flex;
             gap: 6px;
@@ -459,7 +476,6 @@
             background: rgba(236, 72, 153, 0.3);
         }
 
-        /* Bottom Type/Explosion Bar */
         .tg-bottom-bar {
             background: #17212b;
             padding: 10px 12px;
@@ -586,8 +602,11 @@
     </div>
 
     <script>
-        // ВРЕМЕННЫЙ ФЛАГ ДЛЯ ТЕСТИРОВАНИЯ (true = разблокировать все)
-        const FORCE_UNLOCK_ALL = true;
+        // Дата, до которой весь сайт закрыт и заблюрен (14 сентября 2026 года)
+        const SITE_UNLOCK_DATE = "2026-09-14";
+        
+        // Флаг тестирования переведен в false, чтобы работала реальная проверка дат
+        const FORCE_UNLOCK_ALL = false;
 
         const cardsData = [
             {
@@ -634,7 +653,7 @@
                         </div>
                         <div class="slide">
                             <img src="N2.jpg" alt="Zdjęcie 2">
-                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie было mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie było mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
                         </div>
                         <div class="slide">
                             <img src="N3.jpg" alt="Zdjęcie 3">
@@ -678,7 +697,7 @@
                         </div>
                         <div class="slide">
                             <img src="N13.jpg" alt="Zdjęcie 13">
-                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace paki i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie na pace i po prostu rozmawiali o wszystkim.</div>
+                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie i po prostu rozmawiali o wszystkim.</div>
                         </div>
                         <div class="slide">
                             <img src="N14.jpg" alt="Zdjęcie 14">
@@ -893,7 +912,27 @@
             }
         ];
 
-        // Проверка доступности карточки по дате
+        // Проверка блокировки всего сайта (до 14 числа сайт заблюрен / заблокирован)
+        function checkSiteAccess() {
+            if (FORCE_UNLOCK_ALL) return;
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+
+            if (todayStr < SITE_UNLOCK_DATE) {
+                const overlay = document.createElement('div');
+                overlay.className = 'site-lock-overlay';
+                overlay.innerHTML = `
+                    <div style="font-size: 3.5rem; margin-bottom: 15px;">🔒</div>
+                    <h2 style="color: var(--accent); margin-bottom: 10px; font-size: 1.6rem;">Niespodzianka wkrótce!</h2>
+                    <p style="color: var(--text-muted); max-width: 340px; line-height: 1.5; font-size: 0.95rem;">
+                        Strona otwiera się 14 września. Poczekaj jeszcze chwilę, moja kochana! ❤️
+                    </p>
+                `;
+                document.body.appendChild(overlay);
+            }
+        }
+
+        // Проверка доступности отдельной карточки по дате
         function isUnlocked(unlockDateStr) {
             if (FORCE_UNLOCK_ALL) return true;
             const now = new Date();
@@ -955,7 +994,6 @@
             }
         }
 
-        // Копирование кода Allegro для 6-го дня
         function copyAllegroCode() {
             const codeText = document.getElementById('allegroCode').innerText;
             navigator.clipboard.writeText(codeText).then(() => {
@@ -971,7 +1009,6 @@
             });
         }
 
-        // Слайдер для 2-го дня
         function moveSlide(direction) {
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.dot');
@@ -1000,7 +1037,6 @@
             if (dots[currentSlide]) dots[currentSlide].classList.add('active');
         }
 
-        // Лабиринт для 3-го дня
         let playerPos = { x: 0, y: 0 };
         const mazeGrid = [
             [0, 1, 0, 0, 0, 0],
@@ -1078,7 +1114,6 @@
             element.style.borderColor = '#f43f5e';
         }
 
-        // Quiz для 4-го дня
         const quizQuestions = [
             {
                 q: "1. Kto według legend posiada najbardziej zachwycające i ciepłe piękno we Wszechświecie?",
@@ -1103,7 +1138,7 @@
             {
                 q: "5. Kto potrafi inspirować do najszczerszych czynów, ciepłych słów i dawać szczęście każdego dnia?",
                 opts: ["Nie wiem... 🎶", "Nie wiem 💫", "Nie wiem, kto to? 🌟", "Nie wiem, Ty wiesz! ❤️"],
-                answer: "Starożytni poeci szukali swoich muz na Olimpie, a moją Muzą jesteś Ty, moja ukochana dziewczyno! 💖"
+                answer: "Starożytni poeci szukali swoich muz na Olimpie, a moją Muzą jesteś Ty, moja ukochana dziewczyna! 💖"
             },
             {
                 q: "6. Czyje ciepło i wierność potrafią ogrzać nawet przez setki kilometrów odległości?",
@@ -1168,7 +1203,6 @@
             }
         }
 
-        // Telegram Чат для 5-го дня
         const tgMessages = [
             "Hej, Moja Gwiazdeczko... Cieszę się, że odebrałaś ❤️",
             "Chciałem Ci po prostu powiedzieć parę słów przed snem...",
@@ -1303,6 +1337,8 @@
             if (e.key === 'ArrowRight') movePlayer(1, 0);
         });
 
+        // Запуск проверок при загрузке страницы
+        checkSiteAccess();
         renderCards();
     </script>
 </body>
