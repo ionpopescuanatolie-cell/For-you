@@ -102,7 +102,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
             display: none;
             justify-content: center;
@@ -137,6 +137,7 @@
             color: var(--text-muted);
             font-size: 1.5rem;
             cursor: pointer;
+            z-index: 10;
         }
 
         /* Slider Styles */
@@ -211,6 +212,60 @@
         .dot.active {
             background: var(--accent);
         }
+
+        /* Heart Animation for Day 4 */
+        .heart-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            border-radius: 20px;
+            animation: fadeOutHeart 2.5s forwards;
+            pointer-events: none;
+        }
+
+        .beating-heart {
+            font-size: 5rem;
+            animation: pulseHeart 0.8s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 20px var(--accent));
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.35); }
+        }
+
+        @keyframes fadeOutHeart {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Quiz Styles */
+        .quiz-opt-btn {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            color: #fff;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .quiz-opt-btn:hover {
+            background: rgba(236, 72, 153, 0.2);
+            transform: translateX(3px);
+        }
     </style>
 </head>
 <body>
@@ -276,7 +331,7 @@
                         </div>
                         <div class="slide">
                             <img src="N2.jpg" alt="Zdjęcie 2">
-                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie было mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie było mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
                         </div>
                         <div class="slide">
                             <img src="N3.jpg" alt="Zdjęcie 3">
@@ -374,11 +429,9 @@
                         Pomóż mi pokonać dystans! Poprowadź mnie od Mołdawii 🇲🇩 prosto do siebie do Polski 🇵🇱 ❤️
                     </p>
 
-                    <!-- Игровое поле лабиринта -->
                     <div id="maze-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                         <canvas id="mazeCanvas" style="background: #1e293b; border: 2px solid var(--accent); border-radius: 12px; touch-action: none;"></canvas>
                         
-                        <!-- Кнопки управления для мобильных устройств -->
                         <div style="display: grid; grid-template-columns: repeat(3, 50px); gap: 5px; margin-top: 10px;">
                             <div></div>
                             <button onclick="movePlayer(0, -1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬆️</button>
@@ -389,7 +442,6 @@
                         </div>
                     </div>
 
-                    <!-- Секция с 6 сундучками/подарками -->
                     <div id="reward-section" style="display: none; margin-top: 20px; text-align: center;">
                         <h4 style="color: #f43f5e; margin-bottom: 10px;">Pokonałaś dystans! Nareszcie jesteśmy razem! 🎉 ❤️</h4>
                         <p style="font-size: 0.9rem; margin-bottom: 20px;">Otwórz każdy z 6 prezentów, które dla Ciebie przygotowałem:</p>
@@ -407,7 +459,7 @@
                                 <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
-                            <div class="gift-box" onclick="openGift(this, 'Uwielbiam sposób, w jaki na mnie patrzysz i jak się śmiejesz 🥰')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                            <div class="gift-box" onclick="openGift(this, 'Uwielbiam Cię i Twoje piękne oczy 🥰')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
                                 <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
@@ -419,6 +471,43 @@
                                 <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
                                 <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
                             </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                unlockDate: "2026-09-18",
+                title: "Wielki Quiz «Nie wiem»",
+                subtitle: "18 września — Dzień 4",
+                shortDesc: "Pytania o niezwykłych kobietach w historii...",
+                icon: "👑",
+                content: `
+                    <div class="heart-overlay">
+                        <div class="beating-heart">❤️</div>
+                    </div>
+
+                    <h3 style="text-align: center; margin-bottom: 5px;">Pytania do Mojej Najdroższej ✨</h3>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                        Odpowiedz na pytania ниже... Wybierz odpowiedź, która najbardziej Ci pasuje! 😉
+                    </p>
+
+                    <div id="quiz-container">
+                        <div id="quiz-question-box"></div>
+                    </div>
+
+                    <div id="quiz-final" style="display: none; text-align: center; padding: 10px;">
+                        <h4 style="color: var(--accent); font-size: 1.3rem; margin-bottom: 15px;">Widzisz? Na wszystkie pytania odpowiedziałaś «Nie wiem»... 🤭</h4>
+                        <div style="background: rgba(236,72,153,0.15); border: 1px dashed var(--accent); border-radius: 16px; padding: 20px; line-height: 1.6; font-size: 0.95rem;">
+                            <p style="margin-bottom: 12px;">
+                                Ale historia i mity już dawno znają odpowiedź! Wszystkie te boginie, królowe i legendarne kobiety to tylko piękne opowieści...
+                            </p>
+                            <p style="margin-bottom: 12px; font-weight: bold; color: #fff;">
+                                A Ty jesteś prawdziwa, wyjątkowa i absolutnie najcudowniejsza w całym wszechświecie. ✨
+                            </p>
+                            <p style="font-size: 1.05rem; color: var(--accent); font-weight: bold;">
+                                I co najważniejsze — jesteś moja, Kochana! ❤️
+                            </p>
                         </div>
                     </div>
                 `
@@ -458,6 +547,8 @@
 
             if (id === 3) {
                 setTimeout(initMaze, 100);
+            } else if (id === 4) {
+                initQuiz();
             }
         }
 
@@ -526,7 +617,6 @@
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Отрисовка стен
             for (let r = 0; r < mapSize; r++) {
                 for (let c = 0; c < mapSize; c++) {
                     if (mazeGrid[r][c] === 1) {
@@ -538,11 +628,8 @@
                 }
             }
 
-            // Финиш: Польша 🇵🇱 + Она 👧
             ctx.font = `${cellSize * 0.4}px serif`;
             ctx.fillText('🇵🇱👧', (mapSize - 1) * cellSize + 2, (mapSize - 1) * cellSize + cellSize * 0.65);
-
-            // Игрок: Молдова 🇲🇩 + Ты 👦
             ctx.fillText('🇲🇩👦', playerPos.x * cellSize + 2, playerPos.y * cellSize + cellSize * 0.65);
         }
 
@@ -574,6 +661,96 @@
             text.style.display = 'block';
             element.style.background = 'rgba(236, 72, 153, 0.2)';
             element.style.borderColor = '#f43f5e';
+        }
+
+        // Логика Quiz для 4-го дня
+        const quizQuestions = [
+            {
+                q: "1. Kto według legend posiada najbardziej zachwycające i ciepłe piękno we Wszechświecie?",
+                opts: ["Nie wiem... 🤷‍♀️", "Naprawdę nie wiem 🙈", "Chyba nie wiem 🌸", "Nie wiem, powiedz mi! ✨"],
+                answer: "Starożytni Grecy myśleli, że to Afrodyta. Ale oni po prostu nigdy nie widzieli Twojego uśmiechu i Twoich pięknych oczu! Dla mnie najpiękniejsza jesteś tylko Ty. ❤️"
+            },
+            {
+                q: "2. Czyje spojrzenie i urok potrafią oczarować i podbić serce od pierwszej chwili?",
+                opts: ["Nie wiem 👑", "Nie mam pojęcia 🤔", "Nie wiem, kto? 💖", "Skąd mam wiedzieć? 😅"],
+                answer: "Historycy piszą o Kleopatrze, ale jej urok jest niczym w porównaniu z tym, jak sprawiasz, że moje serce bije szybciej za każdym razem, gdy do mnie piszesz! 🥰"
+            },
+            {
+                q: "3. Dla kogo w historii byli gotowi pokonać wszelkie odległości, przeszkody i oceany?",
+                opts: ["Nie wiem... 🌊", "Naprawdę nie wiem! 🗺️", "Nie wiem, hmmm... 💭", "Nie wiem! 🤗"],
+                answer: "Legenda mówi o Helenie Trojańskiej, dla której przemierzano morza. Ale dla Ciebie jestem gotów pokonać każde kilometry między Mołdawią a Polską! 🚗💨"
+            },
+            {
+                q: "4. Czyj uśmiech artyści i poeci nazwaliby najpiękniejszym arcydziełem na świecie?",
+                opts: ["Nie wiem 🎨", "Nie wiem, Moja Mona Lisa? 🤭", "Naprawdę nie wiem ✨", "Nie wiem! 😄"],
+                answer: "Da Vinci latami malował Monę Lisę, ale Twój szczery uśmiech sprawia, że ten świat staje się o tysiąc razy jaśniejszy i piękniejszy! ✨"
+            },
+            {
+                q: "5. Kto potrafi inspirować do najszczerszych czynów, ciepłych słów i dawać szczęście każdego dnia?",
+                opts: ["Nie wiem... 🎶", "Nie wiem 💫", "Nie wiem, kto to? 🌟", "Nie wiem, Ty wiesz! ❤️"],
+                answer: "Starożytni poeci szukali swoich muz na Olimpie, a moją Muzą jesteś Ty, moja ukochana dziewczyno! 💖"
+            },
+            {
+                q: "6. Czyje ciepło i wierność potrafią ogrzać nawet przez setki kilometrów odległości?",
+                opts: ["Nie wiem ⏳", "Nie wiem... 💌", "Naprawdę nie wiem 🌸", "Nie wiem! 💖"],
+                answer: "Penelopa czekała latami, ale nasza pisanie i więź przez kilometry udowodniły mi, że prawdziwe uczucia nie znają żadnych granic. 🥰"
+            }
+        ];
+
+        let currentQIndex = 0;
+
+        function initQuiz() {
+            currentQIndex = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-final').style.display = 'none';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const box = document.getElementById('quiz-question-box');
+            const data = quizQuestions[currentQIndex];
+
+            let html = `
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(236,72,153,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                    <h4 style="font-size: 0.95rem; line-height: 1.4; color: #f8fafc; margin-bottom: 12px;">${data.q}</h4>
+                    <div id="options-list">
+            `;
+
+            data.opts.forEach(opt => {
+                html += `<button class="quiz-opt-btn" onclick="selectAnswer('${data.answer.replace(/'/g, "\\'")}')">${opt}</button>`;
+            });
+
+            html += `
+                    </div>
+                    <div id="answer-reveal" style="display: none; margin-top: 15px; padding: 12px; background: rgba(236,72,153,0.15); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: #fff;"></div>
+                    <button id="next-q-btn" onclick="nextQuestion()" style="display: none; width: 100%; margin-top: 15px; padding: 10px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer;">Następne pytanie ➡️</button>
+                </div>
+            `;
+
+            box.innerHTML = html;
+        }
+
+        function selectAnswer(ansText) {
+            const reveal = document.getElementById('answer-reveal');
+            const nextBtn = document.getElementById('next-q-btn');
+            const optsList = document.getElementById('options-list');
+
+            optsList.style.pointerEvents = 'none';
+            optsList.style.opacity = '0.6';
+
+            reveal.innerHTML = ansText;
+            reveal.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQIndex++;
+            if (currentQIndex < quizQuestions.length) {
+                renderQuestion();
+            } else {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('quiz-final').style.display = 'block';
+            }
         }
 
         window.addEventListener('keydown', (e) => {
