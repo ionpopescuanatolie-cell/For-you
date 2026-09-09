@@ -47,30 +47,6 @@
             font-size: 0.95rem;
         }
 
-        /* Music Toggle Button */
-        .music-toggle {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            width: 44px;
-            height: 44px;
-            background: var(--card-bg);
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            transition: transform 0.2s ease;
-        }
-
-        .music-toggle:active {
-            transform: scale(0.9);
-        }
-
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -369,7 +345,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 480px;
+            height: 520px;
             border: 1px solid rgba(255,255,255,0.1);
             position: relative;
         }
@@ -423,23 +399,30 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
             background-size: 16px 16px;
         }
 
+        .tg-msg-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            max-width: 88%;
+            animation: popIn 0.3s ease-out;
+        }
+
         .tg-msg {
-            max-width: 82%;
             padding: 10px 14px;
             border-radius: 14px 14px 14px 2px;
             font-size: 0.9rem;
             line-height: 1.4;
             position: relative;
-            animation: popIn 0.3s ease-out;
-            align-self: flex-start;
             background: #182533;
             color: #f8fafc;
             border: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
         }
 
         .tg-msg-time {
@@ -449,41 +432,78 @@
             margin-top: 4px;
         }
 
-        .tg-reactions-bar {
-            background: #17212b;
-            padding: 8px 12px;
+        /* Inline Emoji Reactions Under Message */
+        .msg-reactions-inline {
             display: flex;
-            justify-content: space-around;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 2px;
+        }
+
+        .msg-react-btn {
+            background: #1e2c3a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .msg-react-btn:active {
+            transform: scale(1.2);
+            background: rgba(236, 72, 153, 0.3);
+        }
+
+        /* Bottom Type/Explosion Bar */
+        .tg-bottom-bar {
+            background: #17212b;
+            padding: 10px 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             border-top: 1px solid rgba(255,255,255,0.08);
             z-index: 2;
         }
 
-        .tg-reaction-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+        .tg-type-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            border: none;
             border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 1.1rem;
+            padding: 12px 20px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+            transition: transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .tg-reaction-btn:hover {
-            background: rgba(236,72,153,0.2);
-            transform: scale(1.1);
+        .tg-type-btn:active {
+            transform: scale(0.96);
         }
 
         .flying-emoji {
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.2rem;
             pointer-events: none;
-            animation: flyUp 1.5s forwards ease-out;
+            animation: flyUp 1.8s forwards ease-out;
             z-index: 100;
         }
 
         @keyframes flyUp {
-            0% { opacity: 1; transform: translateY(0) scale(0.8); }
-            100% { opacity: 0; transform: translateY(-250px) scale(1.5); }
+            0% { opacity: 1; transform: translateY(0) scale(0.6) rotate(0deg); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-350px) scale(1.8) rotate(20deg); }
         }
 
         @keyframes popIn {
@@ -493,12 +513,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Фоновая музыка -->
-    <audio id="bg-music" loop>
-        <source src="music.mp3" type="audio/mpeg">
-    </audio>
-    <button class="music-toggle" onclick="toggleMusic()" title="Включить/выключить музыку">🎵</button>
 
     <header>
         <h1>Dla Mojej Najdroższej ❤️</h1>
@@ -786,29 +800,15 @@
 
                         <div id="tg-chat-messages" class="tg-chat-body"></div>
 
-                        <div class="tg-reactions-bar">
-                            <button class="tg-reaction-btn" onclick="sendReaction('❤️')">❤️</button>
-                            <button class="tg-reaction-btn" onclick="sendReaction('🔥')">🔥</button>
-                            <button class="tg-reaction-btn" onclick="sendReaction('🥰')">🥰</button>
-                            <button class="tg-reaction-btn" onclick="sendReaction('✨')">✨</button>
+                        <div id="tg-bottom-bar" class="tg-bottom-bar" style="display: none;">
+                            <button class="tg-type-btn" onclick="triggerFireworks(event)">
+                                ✍️ Napisz do mnie... ❤️
+                            </button>
                         </div>
                     </div>
                 `
             }
         ];
-
-        // Управление фоновой музыкой
-        const music = document.getElementById('bg-music');
-        let isMusicPlaying = false;
-
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                music.pause();
-            } else {
-                music.play().catch(() => alert("Dodaj plik music.mp3 do folderu ze stroną!"));
-            }
-            isMusicPlaying = !isMusicPlaying;
-        }
 
         // Проверка доступности карточки по дате
         function isUnlocked(unlockDateStr) {
@@ -872,7 +872,7 @@
             }
         }
 
-        // Логика слайдера для 2-го дня
+        // Слайдер для 2-го дня
         function moveSlide(direction) {
             const slides = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.dot');
@@ -901,7 +901,7 @@
             if (dots[currentSlide]) dots[currentSlide].classList.add('active');
         }
 
-        // Логика лабиринта для 3-го дня
+        // Лабиринт для 3-го дня
         let playerPos = { x: 0, y: 0 };
         const mazeGrid = [
             [0, 1, 0, 0, 0, 0],
@@ -979,7 +979,7 @@
             element.style.borderColor = '#f43f5e';
         }
 
-        // Логика Quiz для 4-го дня
+        // Quiz для 4-го дня
         const quizQuestions = [
             {
                 q: "1. Kto według legend posiada najbardziej zachwycające i ciepłe piękno we Wszechświecie?",
@@ -1069,7 +1069,7 @@
             }
         }
 
-        // Логика Telegram Чата для 5-го дня
+        // Telegram Чат для 5-го дня
         const tgMessages = [
             "Hej, Moja Gwiazdeczko... Cieszę się, że odebrałaś ❤️",
             "Chciałem Ci po prostu powiedzieć parę słów przed snem...",
@@ -1089,9 +1089,10 @@
             tgMsgIdx = 0;
             const container = document.getElementById('tg-chat-messages');
             container.innerHTML = '';
+            document.getElementById('tg-bottom-bar').style.display = 'none';
             
             pushTgMessage();
-            tgChatTimer = setInterval(pushTgMessage, 10000);
+            tgChatTimer = setInterval(pushTgMessage, 4500);
         }
 
         function pushTgMessage() {
@@ -1099,6 +1100,11 @@
                 clearInterval(tgChatTimer);
                 document.getElementById('tg-status').textContent = 'online';
                 document.getElementById('tg-status').style.color = '#22c55e';
+                
+                // Показываем кнопку печати/взрыва после последнего сообщения
+                setTimeout(() => {
+                    document.getElementById('tg-bottom-bar').style.display = 'flex';
+                }, 1000);
                 return;
             }
 
@@ -1111,36 +1117,84 @@
                 const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
                 
                 const container = document.getElementById('tg-chat-messages');
-                const msgEl = document.createElement('div');
-                msgEl.className = 'tg-msg';
-                msgEl.innerHTML = `
-                    <div>${tgMessages[tgMsgIdx]}</div>
-                    <div class="tg-msg-time">${timeStr} ✓✓</div>
+                
+                const msgWrapper = document.createElement('div');
+                msgWrapper.className = 'tg-msg-wrapper';
+                
+                const msgId = 'msg-' + tgMsgIdx;
+                
+                msgWrapper.innerHTML = `
+                    <div class="tg-msg">
+                        <div>${tgMessages[tgMsgIdx]}</div>
+                        <div class="tg-msg-time">${timeStr} ✓✓</div>
+                    </div>
+                    <div class="msg-reactions-inline">
+                        <button class="msg-react-btn" onclick="addMsgReaction(this, '❤️')">❤️ <span class="count">0</span></button>
+                        <button class="msg-react-btn" onclick="addMsgReaction(this, '🔥')">🔥 <span class="count">0</span></button>
+                        <button class="msg-react-btn" onclick="addMsgReaction(this, '🥰')">🥰 <span class="count">0</span></button>
+                        <button class="msg-react-btn" onclick="addMsgReaction(this, '✨')">✨ <span class="count">0</span></button>
+                    </div>
                 `;
-                container.appendChild(msgEl);
+                
+                container.appendChild(msgWrapper);
                 container.scrollTop = container.scrollHeight;
 
                 tgMsgIdx++;
                 statusEl.textContent = 'online';
                 statusEl.style.color = '#22c55e';
-            }, 1500);
+            }, 1200);
         }
 
-        function sendReaction(emoji) {
+        // Добавление реакций прямо под сообщением (без ограничений)
+        function addMsgReaction(btn, emoji) {
+            const countEl = btn.querySelector('.count');
+            let count = parseInt(countEl.textContent) || 0;
+            count++;
+            countEl.textContent = count;
+            btn.style.background = 'rgba(236, 72, 153, 0.25)';
+            btn.style.borderColor = 'var(--accent)';
+
+            // Спавним вылетающий эмодзи
             const chatScreen = document.getElementById('tg-screen-chat');
             const flying = document.createElement('div');
             flying.className = 'flying-emoji';
             flying.textContent = emoji;
 
-            const randomX = Math.random() * (chatScreen.clientWidth - 50) + 20;
-            flying.style.left = randomX + 'px';
-            flying.style.bottom = '60px';
+            const rect = btn.getBoundingClientRect();
+            const chatRect = chatScreen.getBoundingClientRect();
+
+            flying.style.left = (rect.left - chatRect.left + 10) + 'px';
+            flying.style.top = (rect.top - chatRect.top - 20) + 'px';
 
             chatScreen.appendChild(flying);
 
             setTimeout(() => {
                 flying.remove();
-            }, 1500);
+            }, 1800);
+        }
+
+        // Фонтан сердец, фейерверков и эмодзи при клике на кнопку снизу
+        function triggerFireworks(event) {
+            const chatScreen = document.getElementById('tg-screen-chat');
+            const emojis = ['💖', '💗', '💓', '💞', '💘', '❤️', '❣️', '🥰', '😍', '😻', '💋', '🎉', '✨', '🎆'];
+
+            for (let i = 0; i < 18; i++) {
+                setTimeout(() => {
+                    const flying = document.createElement('div');
+                    flying.className = 'flying-emoji';
+                    flying.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                    const randomX = Math.random() * (chatScreen.clientWidth - 60) + 20;
+                    flying.style.left = randomX + 'px';
+                    flying.style.bottom = '40px';
+
+                    chatScreen.appendChild(flying);
+
+                    setTimeout(() => {
+                        flying.remove();
+                    }, 1800);
+                }, i * 60);
+            }
         }
 
         window.addEventListener('keydown', (e) => {
