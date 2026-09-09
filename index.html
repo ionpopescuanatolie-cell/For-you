@@ -1,357 +1,1158 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Chat — День 5</title>
+    <title>Dla Mojej Mołdawskiej Księżniczki ❤️</title>
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #ec4899;
+            --accent-hover: #f43f5e;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #0e1621;
-            color: #ffffff;
+            background-color: var(--bg-color);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Music Toggle Button */
+        .music-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 44px;
+            height: 44px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            transition: transform 0.2s ease;
+        }
+
+        .music-toggle:active {
+            transform: scale(0.9);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .card.locked:hover {
+            transform: none;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            background: rgba(236, 72, 153, 0.1);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .card-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .card-info .subtitle {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .card-info .desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide img {
+            width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .slide-caption {
+            padding: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text);
+            background: rgba(30, 41, 59, 0.9);
+            width: 100%;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 40%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 50%;
+            user-select: none;
+        }
+
+        .slider-btn.prev { left: 10px; }
+        .slider-btn.next { right: 10px; }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: var(--accent);
+        }
+
+        /* Heart Animation for Day 4 */
+        .heart-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 10px;
+            z-index: 5;
+            border-radius: 20px;
+            animation: fadeOutHeart 2.5s forwards;
+            pointer-events: none;
         }
 
-        .chat-container {
+        .beating-heart {
+            font-size: 5rem;
+            animation: pulseHeart 0.8s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 20px var(--accent));
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.35); }
+        }
+
+        @keyframes fadeOutHeart {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Quiz Styles */
+        .quiz-opt-btn {
             width: 100%;
-            max-width: 420px;
-            height: 90vh;
-            background-color: #17212b;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--accent);
+            border-radius: 10px;
+            color: #fff;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .quiz-opt-btn:hover {
+            background: rgba(236, 72, 153, 0.2);
+            transform: translateX(3px);
+        }
+
+        /* Day 5: Telegram Styles */
+        .tg-call-screen {
+            background: linear-gradient(180deg, #1d2733 0%, #0f1721 100%);
             border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: space-between;
+            min-height: 420px;
         }
 
-        /* Шапка чата */
-        .chat-header {
-            background-color: #17212b;
-            padding: 12px 16px;
+        .tg-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .tg-call-btns {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .tg-btn-accept {
+            background: #22c55e;
+            color: #fff;
+            border: none;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+            animation: pulseGreen 1.2s infinite alternate;
+        }
+
+        .tg-btn-decline {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+        }
+
+        @keyframes pulseGreen {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .tg-chat-screen {
+            background: #0f1721;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .tg-chat-header {
+            background: #17212b;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid #0e1621;
+            border-bottom: 1px solid rgba(0,0,0,0.3);
+            z-index: 2;
         }
 
-        .avatar {
-            width: 45px;
-            height: 45px;
+        .tg-chat-header img {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .user-info {
+        .tg-pinned-msg {
+            background: #1e2c3a;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #64b5f6;
+            z-index: 2;
         }
 
-        .user-name {
-            font-size: 16px;
-            font-weight: 600;
+        .tg-pinned-bar {
+            width: 3px;
+            height: 24px;
+            background: #64b5f6;
+            border-radius: 2px;
         }
 
-        .chat-status {
-            font-size: 13px;
-            color: #7f91a4;
-            transition: color 0.3s ease;
+        .tg-pinned-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #e2e8f0;
         }
 
-        .chat-status.typing {
-            color: #64b5ef;
-            font-weight: 500;
-        }
-
-        /* Окно сообщений */
-        .chat-messages {
+        .tg-chat-body {
             flex: 1;
-            padding: 16px;
+            padding: 15px;
             overflow-y: auto;
             display: flex;
-            flex-direction: flex-start;
             flex-direction: column;
             gap: 10px;
-            background-image: radial-gradient(#232e3c 1px, transparent 0);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
             background-size: 16px 16px;
         }
 
-        .message {
-            max-width: 80%;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 14px;
+        .tg-msg {
+            max-width: 82%;
+            padding: 10px 14px;
+            border-radius: 14px 14px 14px 2px;
+            font-size: 0.9rem;
             line-height: 1.4;
             position: relative;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.incoming {
-            background-color: #182533;
+            animation: popIn 0.3s ease-out;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
+            background: #182533;
+            color: #f8fafc;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .message.outgoing {
-            background-color: #2b5278;
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message-meta {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 4px;
-            float: right;
-            margin-left: 8px;
+        .tg-msg-time {
+            font-size: 0.68rem;
+            color: #6c7883;
+            text-align: right;
             margin-top: 4px;
         }
 
-        .message-time {
-            font-size: 11px;
-            color: #7f91a4;
-        }
-
-        .message.outgoing .message-time {
-            color: #b0c4de;
-        }
-
-        /* Галочки прочтения */
-        .ticks {
-            font-size: 11px;
-            color: #7f91a4;
-        }
-
-        .ticks.read {
-            color: #64b5ef;
-        }
-
-        /* Фото-спойлер */
-        .spoiler-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 4px;
-            max-width: 260px;
-        }
-
-        .spoiler-img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: blur(20px);
-            transition: filter 0.5s ease;
-            transform: scale(1.05);
-        }
-
-        .spoiler-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-            padding: 8px;
-            gap: 6px;
-            transition: opacity 0.4s ease;
-        }
-
-        .spoiler-container.revealed .spoiler-img {
-            filter: blur(0);
-            transform: scale(1);
-        }
-
-        .spoiler-container.revealed .spoiler-overlay {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Панель быстрых ответов */
-        .chat-input-panel {
-            padding: 12px;
-            background-color: #17212b;
-            border-top: 1px solid #0e1621;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .quick-replies {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .reply-btn {
-            background-color: #242f3d;
-            color: #64b5ef;
-            border: 1px solid #2b5278;
+        .tg-reactions-bar {
+            background: #17212b;
             padding: 8px 12px;
-            border-radius: 16px;
-            font-size: 13px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            z-index: 2;
+        }
+
+        .tg-reaction-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            flex: 1;
-            text-align: center;
+            transition: 0.2s;
         }
 
-        .reply-btn:hover {
-            background-color: #2b5278;
-            color: #ffffff;
+        .tg-reaction-btn:hover {
+            background: rgba(236,72,153,0.2);
+            transform: scale(1.1);
         }
 
-        .reply-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .flying-emoji {
+            position: absolute;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: flyUp 1.5s forwards ease-out;
+            z-index: 100;
+        }
+
+        @keyframes flyUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-250px) scale(1.5); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <!-- Шапка -->
-        <div class="chat-header">
-            <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar" id="chat-avatar">
-            <div class="user-info">
-                <span class="user-name">Любимая ❤️</span>
-                <span class="chat-status" id="chat-status">в сети</span>
-            </div>
-        </div>
+    <!-- Фоновая музыка -->
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-toggle" onclick="toggleMusic()" title="Включить/выключить музыку">🎵</button>
 
-        <!-- Сообщения -->
-        <div class="chat-messages" id="chat-messages">
-            <!-- Приветственное сообщение -->
-            <div class="message incoming">
-                Привет! Я так ждала 5-й день... Скрывала от тебя кое-что под спойлером 🙈
-                <div class="message-meta">
-                    <span class="message-time">12:00</span>
-                </div>
-            </div>
+    <header>
+        <h1>Dla Mojej Najdroższej ❤️</h1>
+        <p>Małe niespodzianki każdego dnia...</p>
+    </header>
 
-            <!-- Фото-спойлер -->
-            <div class="message incoming">
-                <div class="spoiler-container" onclick="revealSpoiler(this)">
-                    <img src="https://via.placeholder.com/300x200" alt="Secret Photo" class="spoiler-img">
-                    <div class="spoiler-overlay">
-                        <span>🔒 Нажми, чтобы открыть секретный кадр</span>
-                    </div>
-                </div>
-                Посмотри скорее!
-                <div class="message-meta">
-                    <span class="message-time">12:01</span>
-                </div>
-            </div>
-        </div>
+    <div class="grid" id="cardsGrid"></div>
 
-        <!-- Интерактивные варианты ответов -->
-        <div class="chat-input-panel">
-            <div class="quick-replies" id="quick-replies">
-                <button class="reply-btn" onclick="sendUserReply('Вау, это потрясающе! ❤️')">Вау, это потрясающе! ❤️</button>
-                <button class="reply-btn" onclick="sendUserReply('Жду не дождусь нашей встречи! 🥺')">Жду нашей встречи! 🥺</button>
-            </div>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div id="modalContent"></div>
         </div>
     </div>
 
     <script>
-        const statusEl = document.getElementById('chat-status');
-        const messagesEl = document.getElementById('chat-messages');
-        const repliesEl = document.getElementById('quick-replies');
-
-        // Функция открытия фото-спойлера
-        function revealSpoiler(element) {
-            element.classList.add('revealed');
-        }
-
-        // Функция получения текущего времени HH:MM
-        function getCurrentTime() {
-            const now = new Date();
-            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        }
-
-        // Отправка ответа пользователем
-        function sendUserReply(text) {
-            // Отключаем кнопки после выбора
-            repliesEl.innerHTML = '';
-
-            // Добавляем исходящее сообщение
-            const userMsgHtml = `
-                <div class="message outgoing">
-                    ${text}
-                    <div class="message-meta">
-                        <span class="message-time">${getCurrentTime()}</span>
-                        <span class="ticks" id="last-tick">✓</span>
+        const cardsData = [
+            {
+                id: 1,
+                unlockDate: "2026-09-15",
+                title: "Wszystko zaczęło się od gry",
+                subtitle: "15 września — Dzień 1",
+                shortDesc: "Jedna propozycja fuzji, która zmieniła wszystko...",
+                icon: "🎮",
+                content: `
+                    <h3>Nasze początki: Fuzja serc</h3>
+                    <p style="line-height: 1.6; margin-top: 10px;">
+                        Wszystko zaczęło się od zwykłej gry w Palmon. Napisałem do Ciebie po prostu z propozycją fuzji, szczerze myśląc, że to tylko kolejny zwykły moment w grze.
+                    </p>
+                    
+                    <div style="text-align: center; margin: 15px 0;">
+                        <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--accent);">
                     </div>
-                </div>
-            `;
-            messagesEl.insertAdjacentHTML('beforeend', userMsgHtml);
-            scrollToBottom();
+                    
+                    <p style="line-height: 1.6; font-style: italic; color: #f8fafc; text-align: center;">
+                        Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️
+                    </p>
+                `
+            },
+            {
+                id: 2,
+                unlockDate: "2026-09-16",
+                title: "Galeria Naszych Chwil",
+                subtitle: "16 września — Dzień 2",
+                shortDesc: "Moje zdjęcia, które do Ciebie wysyłałem...",
+                icon: "📸",
+                content: `
+                    <h3>Moje zdjęcia dla Ciebie</h3>
+                    <p>Przez ten cały czas wysyłałem Ci różne zdjęcia. Oto mała historia kryjąca się za każdym z nich:</p>
+                    
+                    <div class="slider-container">
+                        <div class="slide active">
+                            <img src="N1.jpg" alt="Zdjęcie 1">
+                            <div class="slide-caption">Moje pierwsze wysłane do Ciebie zdjęcie. Bardzo się denerwowałem, że Ci się nie spodobam, ale...</div>
+                        </div>
+                        <div class="slide">
+                            <img src="I1.jpg" alt="Screen 1">
+                            <div class="slide-caption">...odpowiedziałaś mi w ten sposób: „Jesteś przystojny i masz ładne oczy 😍”! ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N2.jpg" alt="Zdjęcie 2">
+                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie было mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N3.jpg" alt="Zdjęcie 3">
+                            <div class="slide-caption">Kolejny kadr z Włoch — piękne widoki, ale moje myśli i tak uciekały tylko do Ciebie.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N4.jpg" alt="Zdjęcie 4">
+                            <div class="slide-caption">Pamiętam, jak na tym zdjęciu szukałem ładowarki, bo bez Ciebie czas płynie tak ciężko i czuję się, jakby brakowało mi powietrza.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N5.jpg" alt="Zdjęcie 5">
+                            <div class="slide-caption">Tak bardzo polubiłem Twoje reakcje na moje zdjęcia, że sam zacząłem chcieć robić ich dla Ciebie coraz więcej.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N6.jpg" alt="Zdjęcie 6">
+                            <div class="slide-caption">A to ja z brodą XD</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N7.jpg" alt="Zdjęcie 7">
+                            <div class="slide-caption">Ahahaah, a to ja ogolony XD</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N8.jpg" alt="Zdjęcie 8">
+                            <div class="slide-caption">A to ja, kiedy znowu stęskniłem się za Twoją reakcją :p</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N9.jpg" alt="Zdjęcie 9">
+                            <div class="slide-caption">Tęsknię za Tobą każdego dnia... ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N10.jpg" alt="Zdjęcie 10">
+                            <div class="slide-caption">To tak, żeby nie było aż tak poważnie :D</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N11.jpg" alt="Zdjęcie 11">
+                            <div class="slide-caption">Z każdym zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N12.jpg" alt="Zdjęcie 12">
+                            <div class="slide-caption">W każdej chwili na tych zdjęciach myślę o Tobie — o mojej wspaniałej dziewczynie.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N13.jpg" alt="Zdjęcie 13">
+                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace paki i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie na pace i po prostu rozmawiali o wszystkim.</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N14.jpg" alt="Zdjęcie 14">
+                            <div class="slide-caption">A to ja o krok bliżej do Ciebie, moja miłości &lt;3</div>
+                        </div>
+                        <div class="slide">
+                            <img src="N15.jpg" alt="Zdjęcie 15">
+                            <div class="slide-caption">Chyba oszalałem tu z miłości do Ciebie ahaha xd</div>
+                        </div>
+                        
+                        <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+                        <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
+                    </div>
+                    
+                    <div class="slider-dots">
+                        <span class="dot active" onclick="setSlide(0)"></span>
+                        <span class="dot" onclick="setSlide(1)"></span>
+                        <span class="dot" onclick="setSlide(2)"></span>
+                        <span class="dot" onclick="setSlide(3)"></span>
+                        <span class="dot" onclick="setSlide(4)"></span>
+                        <span class="dot" onclick="setSlide(5)"></span>
+                        <span class="dot" onclick="setSlide(6)"></span>
+                        <span class="dot" onclick="setSlide(7)"></span>
+                        <span class="dot" onclick="setSlide(8)"></span>
+                        <span class="dot" onclick="setSlide(9)"></span>
+                        <span class="dot" onclick="setSlide(10)"></span>
+                        <span class="dot" onclick="setSlide(11)"></span>
+                        <span class="dot" onclick="setSlide(12)"></span>
+                        <span class="dot" onclick="setSlide(13)"></span>
+                        <span class="dot" onclick="setSlide(14)"></span>
+                        <span class="dot" onclick="setSlide(15)"></span>
+                    </div>
 
-            // Имитация ответа
-            simulatePartnerResponse();
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border: 1px dashed var(--accent); border-radius: 10px; text-align: center;">
+                        <p style="margin: 0; font-style: italic; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;">
+                            Kocham Cię. Wiem, że zapisujesz moje zdjęcia i tak bardzo chciałbym być obok Ciebie, a nie być tylko zdjęciem w Twoim telefonie... ❤️
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                unlockDate: "2026-09-17",
+                title: "Droga do Ciebie",
+                subtitle: "17 września — Dzień 3",
+                shortDesc: "Poprowadź mnie przez labirynt do siebie...",
+                icon: "🧩",
+                content: `
+                    <h3>Droga do Ciebie</h3>
+                    <p style="text-align: center; font-size: 0.95rem; margin-bottom: 15px;">
+                        Pomóż mi pokonać dystans! Poprowadź mnie od Mołdawii 🇲🇩 prosto do siebie do Polski 🇵🇱 ❤️
+                    </p>
+
+                    <div id="maze-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                        <canvas id="mazeCanvas" style="background: #1e293b; border: 2px solid var(--accent); border-radius: 12px; touch-action: none;"></canvas>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 50px); gap: 5px; margin-top: 10px;">
+                            <div></div>
+                            <button onclick="movePlayer(0, -1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬆️</button>
+                            <div></div>
+                            <button onclick="movePlayer(-1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬅️</button>
+                            <button onclick="movePlayer(0, 1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬇️</button>
+                            <button onclick="movePlayer(1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">➡️</button>
+                        </div>
+                    </div>
+
+                    <div id="reward-section" style="display: none; margin-top: 20px; text-align: center;">
+                        <h4 style="color: #f43f5e; margin-bottom: 10px;">Pokonałaś dystans! Nareszcie jesteśmy razem! 🎉 ❤️</h4>
+                        <p style="font-size: 0.9rem; margin-bottom: 20px;">Otwórz każdy z 6 prezentów, które dla Ciebie przygotowałem:</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <div class="gift-box" onclick="openGift(this, 'Jesteś najbardziej niesamowitą dziewczyną na świecie! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                            <div class="gift-box" onclick="openGift(this, 'Twój uśmiech potrafi rozjaśnić mój najgorszy dzień ✨')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                            <div class="gift-box" onclick="openGift(this, 'Każda chwila rozmowy z Tobą to dla mnie prezent 💖')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                            <div class="gift-box" onclick="openGift(this, 'Uwielbiam Cię i Twoje piękne oczy 🥰')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                            <div class="gift-box" onclick="openGift(this, 'Nie mogę się doczekać, kiedy wreszcie będę mógł Cię mocno przytulić 🤗')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                            <div class="gift-box" onclick="openGift(this, 'Kocham Cię z całego serca i z każdym dniem coraz mocniej! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
+                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
+                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                unlockDate: "2026-09-18",
+                title: "Wielki Quiz «Nie wiem»",
+                subtitle: "18 września — Dzień 4",
+                shortDesc: "Pytania o niezwykłych kobietach w historii...",
+                icon: "👑",
+                content: `
+                    <div class="heart-overlay">
+                        <div class="beating-heart">❤️</div>
+                    </div>
+
+                    <h3 style="text-align: center; margin-bottom: 5px;">Pytania do Mojej Najdroższej ✨</h3>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                        Odpowiedz na pytania poniżej... Wybierz odpowiedź, która najbardziej Ci pasuje! 😉
+                    </p>
+
+                    <div id="quiz-container">
+                        <div id="quiz-question-box"></div>
+                    </div>
+
+                    <div id="quiz-final" style="display: none; text-align: center; padding: 10px;">
+                        <h4 style="color: var(--accent); font-size: 1.3rem; margin-bottom: 15px;">Widzisz? Na wszystkie pytania odpowiedziałaś «Nie wiem»... 🤭</h4>
+                        <div style="background: rgba(236,72,153,0.15); border: 1px dashed var(--accent); border-radius: 16px; padding: 20px; line-height: 1.6; font-size: 0.95rem;">
+                            <p style="margin-bottom: 12px;">
+                                Ale historia i mity już dawno znają odpowiedź! Wszystkie te boginie, królowe i legendarne kobiety to tylko piękne opowieści...
+                            </p>
+                            <p style="margin-bottom: 12px; font-weight: bold; color: #fff;">
+                                A Ty jesteś prawdziwa, wyjątkowa i absolutnie najcudowniejsza w całym wszechświecie. ✨
+                            </p>
+                            <p style="font-size: 1.05rem; color: var(--accent); font-weight: bold;">
+                                I co najważniejsze — jesteś moja, Kochana! ❤️
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                unlockDate: "2026-09-19",
+                title: "Nocny Czat Telegram",
+                subtitle: "19 września — Dzień 5",
+                shortDesc: "Masz połączenie przychodzące...",
+                icon: "💬",
+                content: `
+                    <div id="tg-screen-call" class="tg-call-screen">
+                        <div>
+                            <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Połączenie Telegram</div>
+                            <img src="1776865854921.png" alt="Zeroed ." class="tg-avatar">
+                            <h3 style="font-size: 1.4rem; color: #fff;">Zeroed .</h3>
+                            <p style="font-size: 0.85rem; color: #22c55e; margin-top: 4px;">Dzwoni do Ciebie...</p>
+                        </div>
+                        
+                        <div class="tg-call-btns">
+                            <button class="tg-btn-decline" onclick="alert('Nawet nie próbuj odrzucać! Odbierz rozmowę 😉')">📞</button>
+                            <button class="tg-btn-accept" onclick="acceptTgCall()">📞</button>
+                        </div>
+                    </div>
+
+                    <div id="tg-screen-chat" class="tg-chat-screen" style="display: none;">
+                        <div class="tg-chat-header">
+                            <img src="1776865854921.png" alt="Zeroed .">
+                            <div>
+                                <div style="font-weight: bold; font-size: 0.95rem; color: #fff;">Zeroed .</div>
+                                <div id="tg-status" style="font-size: 0.75rem; color: #22c55e;">online</div>
+                            </div>
+                        </div>
+
+                        <div class="tg-pinned-msg">
+                            <div class="tg-pinned-bar"></div>
+                            <div>
+                                <div style="font-size: 0.7rem; color: #64b5f6; font-weight: bold;">Przypięta wiadomość</div>
+                                <div class="tg-pinned-text">Dla Mojej Najważniejszej Osoby na Świecie... ❤️</div>
+                            </div>
+                        </div>
+
+                        <div id="tg-chat-messages" class="tg-chat-body"></div>
+
+                        <div class="tg-reactions-bar">
+                            <button class="tg-reaction-btn" onclick="sendReaction('❤️')">❤️</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('🔥')">🔥</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('🥰')">🥰</button>
+                            <button class="tg-reaction-btn" onclick="sendReaction('✨')">✨</button>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        // Управление фоновой музыкой
+        const music = document.getElementById('bg-music');
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                music.pause();
+            } else {
+                music.play().catch(() => alert("Dodaj plik music.mp3 do folderu ze stroną!"));
+            }
+            isMusicPlaying = !isMusicPlaying;
         }
 
-        // Имитация ответа партнера с эффектом «печатает...»
-        async function simulatePartnerResponse() {
-            // 1. Смена галочки на «прочитано» через 1 секунду
-            await sleep(1000);
-            const tickEl = document.getElementById('last-tick');
-            if (tickEl) {
-                tickEl.innerText = '✓✓';
-                tickEl.classList.add('read');
+        // Проверка доступности карточки по дате
+        function isUnlocked(unlockDateStr) {
+            const now = new Date();
+            const todayStr = now.toISOString().split('T')[0];
+            return todayStr >= unlockDateStr;
+        }
+
+        // Отрисовка карточек на странице
+        function renderCards() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+
+            cardsData.forEach(card => {
+                const unlocked = isUnlocked(card.unlockDate);
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${unlocked ? '' : 'locked'}`;
+                
+                if (unlocked) {
+                    cardEl.onclick = () => openModal(card.id);
+                } else {
+                    cardEl.onclick = () => alert(`Ta karta zostanie odblokowana ${card.unlockDate}! 🔒`);
+                }
+
+                cardEl.innerHTML = `
+                    <div class="card-icon">${unlocked ? card.icon : '🔒'}</div>
+                    <div class="card-info">
+                        <div class="subtitle">${card.subtitle}</div>
+                        <h3>${card.title}</h3>
+                        <div class="desc">${unlocked ? card.shortDesc : 'Niespodzianka jeszcze zablokowana...'}</div>
+                    </div>
+                `;
+                grid.appendChild(cardEl);
+            });
+        }
+
+        let currentSlide = 0;
+        let tgChatTimer = null;
+
+        function openModal(id) {
+            const card = cardsData.find(c => c.id === id);
+            if (!card || !isUnlocked(card.unlockDate)) return;
+
+            document.getElementById('modalContent').innerHTML = card.content;
+            document.getElementById('modalOverlay').classList.add('active');
+            currentSlide = 0;
+
+            if (id === 3) {
+                setTimeout(initMaze, 100);
+            } else if (id === 4) {
+                initQuiz();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            if (tgChatTimer) {
+                clearInterval(tgChatTimer);
+                tgChatTimer = null;
+            }
+        }
+
+        // Логика слайдера для 2-го дня
+        function moveSlide(direction) {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            if (!slides.length) return;
+
+            slides[currentSlide].classList.remove('active');
+            if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
+
+            slides[currentSlide].classList.add('active');
+            if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+        }
+
+        function setSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            if (!slides.length) return;
+
+            slides[currentSlide].classList.remove('active');
+            if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+
+            currentSlide = index;
+
+            slides[currentSlide].classList.add('active');
+            if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+        }
+
+        // Логика лабиринта для 3-го дня
+        let playerPos = { x: 0, y: 0 };
+        const mazeGrid = [
+            [0, 1, 0, 0, 0, 0],
+            [0, 1, 0, 1, 1, 0],
+            [0, 0, 0, 1, 0, 0],
+            [1, 1, 0, 1, 0, 1],
+            [0, 0, 0, 0, 0, 1],
+            [0, 1, 1, 1, 0, 0]
+        ];
+        const mapSize = 6;
+
+        function initMaze() {
+            playerPos = { x: 0, y: 0 };
+            const canvas = document.getElementById('mazeCanvas');
+            if (!canvas) return;
+            
+            const size = Math.min(canvas.parentElement.clientWidth - 20, 280);
+            canvas.width = size;
+            canvas.height = size;
+            
+            drawMaze();
+        }
+
+        function drawMaze() {
+            const canvas = document.getElementById('mazeCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const cellSize = canvas.width / mapSize;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let r = 0; r < mapSize; r++) {
+                for (let c = 0; c < mapSize; c++) {
+                    if (mazeGrid[r][c] === 1) {
+                        ctx.fillStyle = '#334155';
+                        ctx.beginPath();
+                        ctx.roundRect(c * cellSize + 2, r * cellSize + 2, cellSize - 4, cellSize - 4, 6);
+                        ctx.fill();
+                    }
+                }
             }
 
-            // 2. Статус «печатает...»
-            await sleep(800);
-            statusEl.innerText = 'печатает...';
-            statusEl.classList.add('typing');
+            ctx.font = `${cellSize * 0.4}px serif`;
+            ctx.fillText('🇵🇱👧', (mapSize - 1) * cellSize + 2, (mapSize - 1) * cellSize + cellSize * 0.65);
+            ctx.fillText('🇲🇩👦', playerPos.x * cellSize + 2, playerPos.y * cellSize + cellSize * 0.65);
+        }
 
-            // 3. Задержка имитации набора текста
-            await sleep(2500);
-            statusEl.innerText = 'в сети';
-            statusEl.classList.remove('typing');
+        function movePlayer(dx, dy) {
+            const newX = playerPos.x + dx;
+            const newY = playerPos.y + dy;
 
-            // 4. Добавление входящего сообщения
-            const partnerMsgHtml = `
-                <div class="message incoming">
-                    Я знала, что тебе понравится! Обнимаю тебя очень-очень крепко 🤗❤️
-                    <div class="message-meta">
-                        <span class="message-time">${getCurrentTime()}</span>
+            if (newX >= 0 && newX < mapSize && newY >= 0 && newY < mapSize) {
+                if (mazeGrid[newY][newX] === 0) {
+                    playerPos.x = newX;
+                    playerPos.y = newY;
+                    drawMaze();
+
+                    if (newX === mapSize - 1 && newY === mapSize - 1) {
+                        setTimeout(() => {
+                            document.getElementById('maze-container').style.display = 'none';
+                            document.getElementById('reward-section').style.display = 'block';
+                        }, 300);
+                    }
+                }
+            }
+        }
+
+        function openGift(element, message) {
+            const icon = element.querySelector('.gift-icon');
+            const text = element.querySelector('.gift-text');
+            icon.textContent = '💖';
+            text.textContent = message;
+            text.style.display = 'block';
+            element.style.background = 'rgba(236, 72, 153, 0.2)';
+            element.style.borderColor = '#f43f5e';
+        }
+
+        // Логика Quiz для 4-го дня
+        const quizQuestions = [
+            {
+                q: "1. Kto według legend posiada najbardziej zachwycające i ciepłe piękno we Wszechświecie?",
+                opts: ["Nie wiem... 🤷‍♀️", "Naprawdę nie wiem 🙈", "Chyba nie wiem 🌸", "Nie wiem, powiedz mi! ✨"],
+                answer: "Starożytni Grecy myśleli, że to Afrodyta. Ale oni po prostu nigdy nie widzieli Twojego uśmiechu i Twoich pięknych oczu! Dla mnie najpiękniejsza jesteś tylko Ty. ❤️"
+            },
+            {
+                q: "2. Czyje spojrzenie i urok potrafią oczarować i podbić serce od pierwszej chwili?",
+                opts: ["Nie wiem 👑", "Nie mam pojęcia 🤔", "Nie wiem, kto? 💖", "Skąd mam wiedzieć? 😅"],
+                answer: "Historycy piszą o Kleopatrze, ale jej urok jest niczym w porównaniu z tym, jak sprawiasz, że moje serce bije szybciej za każdym razem, gdy do mnie piszesz! 🥰"
+            },
+            {
+                q: "3. Dla kogo w historii byli gotowi pokonać wszelkie odległości, przeszkody i oceany?",
+                opts: ["Nie wiem... 🌊", "Naprawdę nie wiem! 🗺️", "Nie wiem, hmmm... 💭", "Nie wiem! 🤗"],
+                answer: "Legenda mówi o Helenie Trojańskiej, dla której przemierzano morza. Ale dla Ciebie jestem gotów pokonać każde kilometry między Mołdawią a Polską! 🚗💨"
+            },
+            {
+                q: "4. Czyj uśmiech artyści i poeci nazwaliby najpiękniejszym arcydziełem na świecie?",
+                opts: ["Nie wiem 🎨", "Nie wiem, Moja Mona Lisa? 🤭", "Naprawdę nie wiem ✨", "Nie wiem! 😄"],
+                answer: "Da Vinci latami malował Monę Lisę, ale Twój szczery uśmiech sprawia, że ten świat staje się o tysiąc razy jaśniejszy i piękniejszy! ✨"
+            },
+            {
+                q: "5. Kto potrafi inspirować do najszczerszych czynów, ciepłych słów i dawać szczęście każdego dnia?",
+                opts: ["Nie wiem... 🎶", "Nie wiem 💫", "Nie wiem, kto to? 🌟", "Nie wiem, Ty wiesz! ❤️"],
+                answer: "Starożytni poeci szukali swoich muz na Olimpie, a moją Muzą jesteś Ty, moja ukochana dziewczyno! 💖"
+            },
+            {
+                q: "6. Czyje ciepło i wierność potrafią ogrzać nawet przez setki kilometrów odległości?",
+                opts: ["Nie wiem ⏳", "Nie wiem... 💌", "Naprawdę nie wiem 🌸", "Nie wiem! 💖"],
+                answer: "Penelopa czekała latami, ale nasza pisanie i więź przez kilometry udowodniły mi, że prawdziwe uczucia nie znają żadnych granic. 🥰"
+            }
+        ];
+
+        let currentQIndex = 0;
+
+        function initQuiz() {
+            currentQIndex = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-final').style.display = 'none';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const box = document.getElementById('quiz-question-box');
+            const data = quizQuestions[currentQIndex];
+
+            let html = `
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(236,72,153,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                    <h4 style="font-size: 0.95rem; line-height: 1.4; color: #f8fafc; margin-bottom: 12px;">${data.q}</h4>
+                    <div id="options-list">
+            `;
+
+            data.opts.forEach(opt => {
+                html += `<button class="quiz-opt-btn" onclick="selectAnswer('${data.answer.replace(/'/g, "\\'")}')">${opt}</button>`;
+            });
+
+            html += `
                     </div>
+                    <div id="answer-reveal" style="display: none; margin-top: 15px; padding: 12px; background: rgba(236,72,153,0.15); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: #fff;"></div>
+                    <button id="next-q-btn" onclick="nextQuestion()" style="display: none; width: 100%; margin-top: 15px; padding: 10px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer;">Następne pytanie ➡️</button>
                 </div>
             `;
-            messagesEl.insertAdjacentHTML('beforeend', partnerMsgHtml);
-            scrollToBottom();
+
+            box.innerHTML = html;
         }
 
-        function scrollToBottom() {
-            messagesEl.scrollTop = messagesEl.scrollHeight;
+        function selectAnswer(ansText) {
+            const reveal = document.getElementById('answer-reveal');
+            const nextBtn = document.getElementById('next-q-btn');
+            const optsList = document.getElementById('options-list');
+
+            optsList.style.pointerEvents = 'none';
+            optsList.style.opacity = '0.6';
+
+            reveal.innerHTML = ansText;
+            reveal.style.display = 'block';
+            nextBtn.style.display = 'block';
         }
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
+        function nextQuestion() {
+            currentQIndex++;
+            if (currentQIndex < quizQuestions.length) {
+                renderQuestion();
+            } else {
+                document.getElementById('quiz-container').style.display = 'none';
+                document.getElementById('quiz-final').style.display = 'block';
+            }
         }
+
+        // Логика Telegram Чата для 5-го дня
+        const tgMessages = [
+            "Hej, Moja Gwiazdeczko... Cieszę się, że odebrałaś ❤️",
+            "Chciałem Ci po prostu powiedzieć parę słów przed snem...",
+            "Wiesz, czasami patrzę w nocne niebo i myślę o nas.",
+            "Gwiazdy na niebie są piękne, ale dla mnie najjaśniejszą gwiazdą we Wszechświecie jesteś Ty... ✨",
+            "Nawet jeśli dzielą nas setki kilometrów, każda wiadomość od Ciebie sprawia, że jesteś bardzo blisko mojego serca.",
+            "Jesteś moim najcenniejszym skarbm i czymś najpiękniejszym, co spotkało mnie w życiu. 💎",
+            "Pamiętaj o tym zawsze. Dobranoc, Kochana! ❤️"
+        ];
+
+        let tgMsgIdx = 0;
+
+        function acceptTgCall() {
+            document.getElementById('tg-screen-call').style.display = 'none';
+            document.getElementById('tg-screen-chat').style.display = 'flex';
+            
+            tgMsgIdx = 0;
+            const container = document.getElementById('tg-chat-messages');
+            container.innerHTML = '';
+            
+            pushTgMessage();
+            tgChatTimer = setInterval(pushTgMessage, 10000);
+        }
+
+        function pushTgMessage() {
+            if (tgMsgIdx >= tgMessages.length) {
+                clearInterval(tgChatTimer);
+                document.getElementById('tg-status').textContent = 'online';
+                document.getElementById('tg-status').style.color = '#22c55e';
+                return;
+            }
+
+            const statusEl = document.getElementById('tg-status');
+            statusEl.textContent = 'pisze...';
+            statusEl.style.color = '#38bdf8';
+
+            setTimeout(() => {
+                const now = new Date();
+                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                
+                const container = document.getElementById('tg-chat-messages');
+                const msgEl = document.createElement('div');
+                msgEl.className = 'tg-msg';
+                msgEl.innerHTML = `
+                    <div>${tgMessages[tgMsgIdx]}</div>
+                    <div class="tg-msg-time">${timeStr} ✓✓</div>
+                `;
+                container.appendChild(msgEl);
+                container.scrollTop = container.scrollHeight;
+
+                tgMsgIdx++;
+                statusEl.textContent = 'online';
+                statusEl.style.color = '#22c55e';
+            }, 1500);
+        }
+
+        function sendReaction(emoji) {
+            const chatScreen = document.getElementById('tg-screen-chat');
+            const flying = document.createElement('div');
+            flying.className = 'flying-emoji';
+            flying.textContent = emoji;
+
+            const randomX = Math.random() * (chatScreen.clientWidth - 50) + 20;
+            flying.style.left = randomX + 'px';
+            flying.style.bottom = '60px';
+
+            chatScreen.appendChild(flying);
+
+            setTimeout(() => {
+                flying.remove();
+            }, 1500);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                const modal = document.getElementById('modalOverlay');
+                if (modal.classList.contains('active')) {
+                    e.preventDefault();
+                }
+            }
+            if (e.key === 'ArrowUp') movePlayer(0, -1);
+            if (e.key === 'ArrowDown') movePlayer(0, 1);
+            if (e.key === 'ArrowLeft') movePlayer(-1, 0);
+            if (e.key === 'ArrowRight') movePlayer(1, 0);
+        });
+
+        renderCards();
     </script>
 </body>
 </html>
