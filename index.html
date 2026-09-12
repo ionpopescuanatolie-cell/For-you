@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dla Mojej Mołdawskiej Księżniczki ❤️</title>
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #ec4899;
-            --accent-hover: #f43f5e;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-        }
+    <title>Odliczanie ❤️</title>
+    
+    <!-- CDN для эффекта праздничных частиц/конфетти -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <style>
+        /* Базовые стили страницы */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -22,1346 +18,550 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text);
+            background: #0f172a;
+            color: #f8fafc;
             min-height: 100vh;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
         }
 
-        header {
+        h1 {
+            color: #f472b6;
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 25px;
         }
 
-        header h1 {
-            color: var(--accent);
-            font-size: 1.8rem;
-            margin-bottom: 5px;
-        }
-
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        .grid {
+        /* Сетка карточек */
+        .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            gap: 20px;
+            max-width: 1000px;
             width: 100%;
-            max-width: 800px;
         }
 
         .card {
-            background: var(--card-bg);
+            background: rgba(30, 27, 75, 0.6);
             border: 1px solid rgba(236, 72, 153, 0.3);
             border-radius: 16px;
             padding: 20px;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, opacity 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            position: relative;
+            text-align: center;
         }
 
         .card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
-        }
-
-        .card.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .card.locked:hover {
-            transform: none;
-            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25);
         }
 
         .card-icon {
             font-size: 2.5rem;
-            background: rgba(236, 72, 153, 0.1);
-            padding: 12px;
-            border-radius: 12px;
+            margin-bottom: 10px;
         }
 
-        .card-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
+        .card-title {
+            color: #f472b6;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
         }
 
-        .card-info .subtitle {
-            font-size: 0.8rem;
-            color: var(--accent);
-            margin-bottom: 6px;
-        }
-
-        .card-info .desc {
+        .card-subtitle {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: #94a3b8;
         }
 
-        /* Site Lock Overlay Styles */
-        .site-lock-overlay {
+        /* Обычная модалка для остальных дней */
+        .standard-modal {
+            display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(12px);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9000;
             align-items: center;
             justify-content: center;
-            text-align: center;
             padding: 20px;
         }
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 15px;
-        }
-
-        .modal-overlay.active {
+        .standard-modal.active {
             display: flex;
         }
 
-        .modal {
-            background: var(--card-bg);
-            border: 1px solid var(--accent);
+        .standard-modal-content {
+            background: #1e1b4b;
+            border: 1px solid #ec4899;
             border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
             padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
             position: relative;
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
         }
 
         .close-btn {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5rem;
+            top: 10px; right: 15px;
+            background: none; border: none;
+            color: #94a3b8; font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Модалка Созвездия (День 0) */
+        .constellation-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 26, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .constellation-modal.active {
+            display: flex;
+        }
+
+        .constellation-container {
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.2);
+            border-radius: 24px;
+            padding: 20px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            color: #f8fafc;
+            touch-action: none;
+        }
+
+        .constellation-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: none; border: none;
+            color: #94a3b8; font-size: 28px;
             cursor: pointer;
             z-index: 10;
         }
 
-        /* Slider Styles */
-        .slider-container {
-            position: relative;
-            width: 100%;
-            margin-top: 15px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #0f172a;
-        }
-
-        .slide {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .slide.active {
-            display: flex;
-        }
-
-        .slide img {
-            width: 100%;
-            max-height: 350px;
-            object-fit: contain;
-            background: #000;
-        }
-
-        .slide-caption {
-            padding: 12px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: var(--text);
-            background: rgba(30, 41, 59, 0.9);
-            width: 100%;
-        }
-
-        .slider-btn {
-            position: absolute;
-            top: 40%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border-radius: 50%;
-            user-select: none;
-        }
-
-        .slider-btn.prev { left: 10px; }
-        .slider-btn.next { right: 10px; }
-
-        .slider-dots {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
+        .constellation-title {
+            font-size: 1.15rem;
+            color: #f472b6;
             margin-top: 10px;
-            flex-wrap: wrap;
+            margin-bottom: 5px;
         }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .dot.active {
-            background: var(--accent);
-        }
-
-        /* Heart Animation for Day 4 */
-        .heart-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--card-bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            border-radius: 20px;
-            animation: fadeOutHeart 2.5s forwards;
-            pointer-events: none;
-        }
-
-        .beating-heart {
-            font-size: 5rem;
-            animation: pulseHeart 0.8s infinite alternate ease-in-out;
-            filter: drop-shadow(0 0 20px var(--accent));
-        }
-
-        @keyframes pulseHeart {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.35); }
-        }
-
-        @keyframes fadeOutHeart {
-            0% { opacity: 1; }
-            70% { opacity: 1; }
-            100% { opacity: 0; visibility: hidden; }
-        }
-
-        /* Quiz Styles */
-        .quiz-opt-btn {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--accent);
-            border-radius: 10px;
-            color: #fff;
-            text-align: left;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .quiz-opt-btn:hover {
-            background: rgba(236, 72, 153, 0.2);
-            transform: translateX(3px);
-        }
-
-        /* Day 5: Telegram Styles */
-        .tg-call-screen {
-            background: linear-gradient(180deg, #1d2733 0%, #0f1721 100%);
-            border-radius: 16px;
-            padding: 30px 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 420px;
-        }
-
-        .tg-avatar {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid rgba(255,255,255,0.2);
-            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+        .constellation-hint {
+            font-size: 0.8rem;
+            color: #94a3b8;
             margin-bottom: 15px;
         }
 
-        .tg-call-btns {
-            display: flex;
-            justify-style: space-around;
+        .sky-wrapper {
+            position: relative;
             width: 100%;
-            margin-top: 30px;
-        }
-
-        .tg-btn-accept {
-            background: #22c55e;
-            color: #fff;
-            border: none;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            font-size: 1.8rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
-            animation: pulseGreen 1.2s infinite alternate;
-        }
-
-        .tg-btn-decline {
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            font-size: 1.8rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
-        }
-
-        @keyframes pulseGreen {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        .tg-chat-screen {
-            background: #0f1721;
+            height: 260px;
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 16px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 520px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
+            margin-bottom: 15px;
+            touch-action: none;
         }
 
-        .tg-chat-header {
-            background: #17212b;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid rgba(0,0,0,0.3);
-            z-index: 2;
-        }
-
-        .tg-chat-header img {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .tg-pinned-msg {
-            background: #1e2c3a;
-            padding: 8px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: #64b5f6;
-            z-index: 2;
-        }
-
-        .tg-pinned-bar {
-            width: 3px;
-            height: 24px;
-            background: #64b5f6;
-            border-radius: 2px;
-        }
-
-        .tg-pinned-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #e2e8f0;
-        }
-
-        .tg-chat-body {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
-            background-size: 16px 16px;
-        }
-
-        .tg-msg-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 5px;
-            max-width: 88%;
-            animation: popIn 0.3s ease-out;
-        }
-
-        .tg-msg {
-            padding: 10px 14px;
-            border-radius: 14px 14px 14px 2px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            position: relative;
-            background: #182533;
-            color: #f8fafc;
-            border: 1px solid rgba(255,255,255,0.05);
-            width: 100%;
-        }
-
-        .tg-msg-time {
-            font-size: 0.68rem;
-            color: #6c7883;
-            text-align: right;
-            margin-top: 4px;
-        }
-
-        .msg-reactions-inline {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            margin-top: 2px;
-        }
-
-        .msg-react-btn {
-            background: #1e2c3a;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: transform 0.1s, background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .msg-react-btn:active {
-            transform: scale(1.2);
-            background: rgba(236, 72, 153, 0.3);
-        }
-
-        .tg-bottom-bar {
-            background: #17212b;
-            padding: 10px 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            z-index: 2;
-        }
-
-        .tg-type-btn {
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
-            border: none;
-            border-radius: 20px;
-            padding: 12px 20px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
-            transition: transform 0.1s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .tg-type-btn:active {
-            transform: scale(0.96);
-        }
-
-        /* Day 6: Gift Voucher Styles */
-        .allegro-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #ff5a00;
-            border-radius: 16px;
-            padding: 25px 20px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 8px 25px rgba(255, 90, 0, 0.25);
-        }
-
-        .allegro-logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #ff5a00;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .code-box {
-            background: #0f1721;
-            border: 2px dashed #ff5a00;
-            border-radius: 12px;
-            padding: 15px;
-            margin: 20px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .code-text {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #38bdf8;
-            letter-spacing: 2px;
-            user-select: all;
-        }
-
-        .copy-btn {
-            background: #ff5a00;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        .copy-btn:active {
-            transform: scale(0.95);
-        }
-
-        .flying-emoji {
+        #constellationCanvas {
             position: absolute;
-            font-size: 2.2rem;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        .star-point {
+            position: absolute;
+            width: 44px; height: 44px;
+            margin-top: -22px; margin-left: -22px;
+            border-radius: 50%;
+            background: rgba(236, 72, 153, 0.15);
+            border: 2px solid #ec4899;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .star-point.active {
+            background: #ec4899;
+            box-shadow: 0 0 20px #ec4899, 0 0 40px #f472b6;
+            transform: scale(1.2);
+        }
+
+        .star-sparkle {
+            color: #fff;
+            font-size: 18px;
             pointer-events: none;
-            animation: flyUp 1.8s forwards ease-out;
-            z-index: 100;
         }
 
-        @keyframes flyUp {
-            0% { opacity: 1; transform: translateY(0) scale(0.6) rotate(0deg); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-350px) scale(1.8) rotate(20deg); }
+        .star-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #cbd5e1;
+            pointer-events: none;
         }
 
-        @keyframes popIn {
-            0% { transform: scale(0.9); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        .constellation-result.hidden {
+            display: none;
+        }
+
+        .constellation-result {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .glow-heart {
+            font-size: 3.2rem;
+            animation: heartbeat 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        .info-badge {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #f472b6;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-height: 650px) {
+            .sky-wrapper { height: 220px; }
+            .constellation-container { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Dla Mojej Najdroższej ❤️</h1>
-        <p>Małe niespodzianki każdego dnia...</p>
-    </header>
+    <h1>Nasze Odliczanie ✨</h1>
+    <div class="cards-grid" id="cardsGrid"></div>
 
-    <div class="grid" id="cardsGrid"></div>
+    <!-- Модальное окно Созвездия для Дня 0 -->
+    <div id="constellationModal" class="constellation-modal">
+        <div class="constellation-container">
+            <button class="constellation-close" onclick="closeConstellation()">&times;</button>
+            <h2 class="constellation-title">Połącz gwiazdy, aby zapalić nasz dzień ✨</h2>
+            <p class="constellation-hint">Przeciągnij palcem/myszką po gwiazdach, aby połączyć konstelację 15.09</p>
+            
+            <div class="sky-wrapper" id="skyWrapper">
+                <canvas id="constellationCanvas"></canvas>
+                <div class="star-point" data-id="1" style="top: 25%; left: 30%;">
+                    <span class="star-sparkle">✦</span>
+                    <span class="star-label">15</span>
+                </div>
+                <div class="star-point" data-id="2" style="top: 25%; left: 70%;">
+                    <span class="star-sparkle">✦</span>
+                    <span class="star-label">09</span>
+                </div>
+                <div class="star-point" data-id="3" style="top: 75%; left: 70%;">
+                    <span class="star-sparkle">✦</span>
+                    <span class="star-label">❤️</span>
+                </div>
+                <div class="star-point" data-id="4" style="top: 75%; left: 30%;">
+                    <span class="star-sparkle">✦</span>
+                    <span class="star-label">∞</span>
+                </div>
+            </div>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-            <div id="modalContent"></div>
+            <div id="constellationResult" class="constellation-result hidden">
+                <div class="glow-heart">💖</div>
+                <h3>Wszystkiego Najlepszego z Okazji Rocznicy! 🎉</h3>
+                <p style="margin-top: 10px; line-height: 1.4;">
+                    Dzisiaj jest nasz wyjątkowy dzień — nasza Rocznica! Dziękuję Ci za każdą wspólną chwilę, uśmiech i miłość ❤️
+                </p>
+                <div class="info-badge">
+                    ✨ Od dzisiaj zaczynamy odliczanie! Co dzień aż do Twoich Urodzin otworzy się nowa karta!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка для обычных дней -->
+    <div id="standardModal" class="standard-modal">
+        <div class="standard-modal-content">
+            <button class="close-btn" onclick="closeStandardModal()">&times;</button>
+            <h2 id="modalTitle" style="color: #f472b6; margin-bottom: 10px;"></h2>
+            <p id="modalBody"></p>
         </div>
     </div>
 
     <script>
-        // Дата, до которой весь сайт закрыт (15 сентября 2026 года)
-        const SITE_UNLOCK_DATE = "2026-09-15";
-        
-        // Установите в true, если хотите временно открыть ВСЕ карточки для проверки
-        const FORCE_UNLOCK_ALL = false;
-
+        // Данные всех карточек (День 0 стоит первым!)
         const cardsData = [
             {
                 id: 0,
                 unlockDate: "2026-09-15",
-                title: "Nasza Rocznica!",
-                subtitle: "15 września — Dzień 0",
-                shortDesc: "Wszystkiego najlepszego z okazji naszej rocznicy! ❤️",
-                icon: "💖",
-                content: `
-                    <h3 style="text-align: center; color: var(--accent); margin-bottom: 15px;">Wszystkiego Najlepszego z Okazji Naszej Rocznicy! ❤️</h3>
-                    <p style="line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem;">
-                        Dzisiaj jest dla nas wyjątkowy dzień — nasza rocznica! Minął kolejny czas, odkąd jesteśmy razem, i każda chwila spędzona z Tobą jest dla mnie niezwykłym darem.
-                    </p>
-                    <p style="line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem;">
-                        Chociaż dzieli nas odległość, moje serce jest zawsze przy Tobie. Przygotowałem ten mały kalendarz odliczania, aby sprawić Ci radość i przypomnieć, jak bardzo jesteś dla mnie ważna!
-                    </p>
-                    <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(236, 72, 153, 0.15); border: 1px dashed var(--accent); border-radius: 12px;">
-                        <p style="margin: 0; font-weight: bold; color: #fff; font-size: 1rem;">
-                            To dopiero początek! Wracaj tu codziennie aż do Twoich urodzin (21 września), aby otwierać kolejne niespodzianki... ✨🥰
-                        </p>
-                    </div>
-                `
+                title: "Dzień 0: Nasza Rocznica! ❤️",
+                subtitle: "15 września — Start Odliczania",
+                icon: "✨"
             },
             {
                 id: 1,
                 unlockDate: "2026-09-16",
-                title: "Wszystko zaczęło się od gry",
-                subtitle: "16 września — Dzień 1",
-                shortDesc: "Jedna propozycja fuzji, która zmieniła wszystko...",
-                icon: "🎮",
-                content: `
-                    <h3>Nasze początki: Fuzja serc</h3>
-                    <p style="line-height: 1.6; margin-top: 10px;">
-                        Wszystko zaczęło się od zwykłej gry w Palmon. Napisałem do Ciebie po prostu z propozycją fuzji, szczerze myśląc, że to tylko kolejny zwykły moment w grze.
-                    </p>
-                    
-                    <div style="text-align: center; margin: 15px 0;">
-                        <img src="Screenshot_20260426_173726_Palmon Survival.jpg" alt="Zrzut ekranu z gry Palmon" style="max-width: 100%; height: auto; border-radius: 12px; border: 2px solid var(--accent);">
-                    </div>
-                    
-                    <p style="line-height: 1.6; font-style: italic; color: #f8fafc; text-align: center;">
-                        Kto by pomyślał, że w jakiejś grze mobilnej poznam Ciebie — najważniejszą osobę w moim życiu... ❤️
-                    </p>
-                `
+                title: "Dzień 1",
+                subtitle: "16 września",
+                icon: "🎁",
+                text: "Wiadomość na Dzień 1..."
             },
             {
                 id: 2,
                 unlockDate: "2026-09-17",
-                title: "Galeria Naszych Chwil",
-                subtitle: "17 września — Dzień 2",
-                shortDesc: "Moje zdjęcia, które do Ciebie wysyłałem...",
-                icon: "📸",
-                content: `
-                    <h3>Moje zdjęcia dla Ciebie</h3>
-                    <p>Przez ten cały czas wysyłałem Ci różne zdjęcia. Oto mała historia kryjąca się za każdym z nich:</p>
-                    
-                    <div class="slider-container">
-                        <div class="slide active">
-                            <img src="N1.jpg" alt="Zdjęcie 1">
-                            <div class="slide-caption">Moje pierwsze wysłane do Ciebie zdjęcie. Bardzo się denerwowałem, że Ci się nie spodobam, ale...</div>
-                        </div>
-                        <div class="slide">
-                            <img src="I1.jpg" alt="Screen 1">
-                            <div class="slide-caption">...odpowiedziałaś mi w ten sposób: „Jesteś przystojny i masz ładne oczy 😍”! ❤️</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N2.jpg" alt="Zdjęcie 2">
-                            <div class="slide-caption">To była wycieczka do Włoch. Było tam oczywiście pięknie, ale bez Ciebie było mi bardzo smutno, mogłem myśleć tylko o Tobie...</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N3.jpg" alt="Zdjęcie 3">
-                            <div class="slide-caption">Kolejny kadr z Włoch — piękne widoki, ale moje myśli i tak uciekały tylko do Ciebie.</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N4.jpg" alt="Zdjęcie 4">
-                            <div class="slide-caption">Pamiętam, jak na tym zdjęciu szukałem ładowarki, bo bez Ciebie czas płynie tak ciężko i czuję się, jakby brakowało mi powietrza.</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N5.jpg" alt="Zdjęcie 5">
-                            <div class="slide-caption">Tak bardzo polubiłem Twoje reakcje na moje zdjęcia, że sam zacząłem chcieć robić ich dla Ciebie coraz więcej.</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N6.jpg" alt="Zdjęcie 6">
-                            <div class="slide-caption">A to ja z brodą XD</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N7.jpg" alt="Zdjęcie 7">
-                            <div class="slide-caption">Ahahaah, a to ja ogolony XD</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N8.jpg" alt="Zdjęcie 8">
-                            <div class="slide-caption">A to ja, kiedy znowu stęskniłem się za Twoją reakcją :p</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N9.jpg" alt="Zdjęcie 9">
-                            <div class="slide-caption">Tęsknię za Tobą każdego dnia... ❤️</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N10.jpg" alt="Zdjęcie 10">
-                            <div class="slide-caption">To tak, żeby nie było aż tak poważnie :D</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N11.jpg" alt="Zdjęcie 11">
-                            <div class="slide-caption">Z każdym zdjęciem wysłanym do Ciebie czuję się coraz pewniej ❤️</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N12.jpg" alt="Zdjęcie 12">
-                            <div class="slide-caption">W każdej chwili na tych zdjęciach myślę o Tobie — o mojej wspaniałej dziewczynie.</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N13.jpg" alt="Zdjęcie 13">
-                            <div class="slide-caption">Pamiętam, jak siedziałem tu na pace i myślałem, jak dobrze byłoby, gdybyś była tam ze mną... Siedzielibyśmy razem w lesie i po prostu rozmawiali o wszystkim.</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N14.jpg" alt="Zdjęcie 14">
-                            <div class="slide-caption">A to ja o krok bliżej do Ciebie, moja miłości &lt;3</div>
-                        </div>
-                        <div class="slide">
-                            <img src="N15.jpg" alt="Zdjęcie 15">
-                            <div class="slide-caption">Chyba oszalałem tu z miłości do Ciebie ahaha xd</div>
-                        </div>
-                        
-                        <button class="slider-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-                        <button class="slider-btn next" onclick="moveSlide(1)">&#10095;</button>
-                    </div>
-                    
-                    <div class="slider-dots">
-                        <span class="dot active" onclick="setSlide(0)"></span>
-                        <span class="dot" onclick="setSlide(1)"></span>
-                        <span class="dot" onclick="setSlide(2)"></span>
-                        <span class="dot" onclick="setSlide(3)"></span>
-                        <span class="dot" onclick="setSlide(4)"></span>
-                        <span class="dot" onclick="setSlide(5)"></span>
-                        <span class="dot" onclick="setSlide(6)"></span>
-                        <span class="dot" onclick="setSlide(7)"></span>
-                        <span class="dot" onclick="setSlide(8)"></span>
-                        <span class="dot" onclick="setSlide(9)"></span>
-                        <span class="dot" onclick="setSlide(10)"></span>
-                        <span class="dot" onclick="setSlide(11)"></span>
-                        <span class="dot" onclick="setSlide(12)"></span>
-                        <span class="dot" onclick="setSlide(13)"></span>
-                        <span class="dot" onclick="setSlide(14)"></span>
-                        <span class="dot" onclick="setSlide(15)"></span>
-                    </div>
-
-                    <div style="margin-top: 20px; padding: 15px; background: rgba(236, 72, 153, 0.1); border: 1px dashed var(--accent); border-radius: 10px; text-align: center;">
-                        <p style="margin: 0; font-style: italic; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;">
-                            Kocham Cię. Wiem, że zapisujesz moje zdjęcia i tak bardzo chciałbym być obok Ciebie, a nie być tylko zdjęciem w Twoim telefonie... ❤️
-                        </p>
-                    </div>
-                `
-            },
-            {
-                id: 3,
-                unlockDate: "2026-09-18",
-                title: "Droga do Ciebie",
-                subtitle: "18 września — Dzień 3",
-                shortDesc: "Poprowadź mnie przez labirynt do siebie...",
-                icon: "🧩",
-                content: `
-                    <h3>Droga do Ciebie</h3>
-                    <p style="text-align: center; font-size: 0.95rem; margin-bottom: 15px;">
-                        Pomóż mi pokonać dystans! Poprowadź mnie od Mołdawii 🇲🇩 prosto do siebie do Polski 🇵🇱 ❤️
-                    </p>
-
-                    <div id="maze-container" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                        <canvas id="mazeCanvas" style="background: #1e293b; border: 2px solid var(--accent); border-radius: 12px; touch-action: none;"></canvas>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(3, 50px); gap: 5px; margin-top: 10px;">
-                            <div></div>
-                            <button onclick="movePlayer(0, -1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬆️</button>
-                            <div></div>
-                            <button onclick="movePlayer(-1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬅️</button>
-                            <button onclick="movePlayer(0, 1)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">⬇️</button>
-                            <button onclick="movePlayer(1, 0)" style="padding: 12px; background: rgba(236,72,153,0.2); border: 1px solid var(--accent); color: #fff; border-radius: 8px; font-size: 1.2rem; cursor: pointer;">➡️</button>
-                        </div>
-                    </div>
-
-                    <div id="reward-section" style="display: none; margin-top: 20px; text-align: center;">
-                        <h4 style="color: #f43f5e; margin-bottom: 10px;">Pokonałaś dystans! Nareszcie jesteśmy razem! 🎉 ❤️</h4>
-                        <p style="font-size: 0.9rem; margin-bottom: 20px;">Otwórz każdy z 6 prezentów, które dla Ciebie przygotowałem:</p>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                            <div class="gift-box" onclick="openGift(this, 'Jesteś najbardziej niesamowitą dziewczyną na świecie! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                            <div class="gift-box" onclick="openGift(this, 'Twój uśmiech potrafi rozjaśnić mój najgorszy dzień ✨')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                            <div class="gift-box" onclick="openGift(this, 'Każda chwila rozmowy z Tobą to dla mnie prezent 💖')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                            <div class="gift-box" onclick="openGift(this, 'Uwielbiam Cię i Twoje piękne oczy 🥰')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                            <div class="gift-box" onclick="openGift(this, 'Nie mogę się doczekać, kiedy wreszcie będę mógł Cię mocno przytulić 🤗')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                            <div class="gift-box" onclick="openGift(this, 'Kocham Cię z całego serca i z każdym dniem coraz mocniej! ❤️')" style="background: rgba(255,255,255,0.05); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; cursor: pointer; transition: 0.3s;">
-                                <div style="font-size: 2.5rem;" class="gift-icon">🎁</div>
-                                <div class="gift-text" style="display:none; font-size: 0.85rem; color: #f8fafc; margin-top: 8px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 4,
-                unlockDate: "2026-09-19",
-                title: "Wielki Quiz «Nie wiem»",
-                subtitle: "19 września — Dzień 4",
-                shortDesc: "Pytania o niezwykłych kobietach w historii...",
-                icon: "👑",
-                content: `
-                    <div class="heart-overlay">
-                        <div class="beating-heart">❤️</div>
-                    </div>
-
-                    <h3 style="text-align: center; margin-bottom: 5px;">Pytania do Mojej Najdroższej ✨</h3>
-                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
-                        Odpowiedz na pytania poniżej... Wybierz odpowiedź, która najbardziej Ci pasuje! 😉
-                    </p>
-
-                    <div id="quiz-container">
-                        <div id="quiz-question-box"></div>
-                    </div>
-
-                    <div id="quiz-final" style="display: none; text-align: center; padding: 10px;">
-                        <h4 style="color: var(--accent); font-size: 1.3rem; margin-bottom: 15px;">Widzisz? Na wszystkie pytania odpowiedziałaś «Nie wiem»... 🤭</h4>
-                        <div style="background: rgba(236,72,153,0.15); border: 1px dashed var(--accent); border-radius: 16px; padding: 20px; line-height: 1.6; font-size: 0.95rem;">
-                            <p style="margin-bottom: 12px;">
-                                Ale historia i mity już dawno znają odpowiedź! Wszystkie te boginie, królowe i legendarne kobiety to tylko piękne opowieści...
-                            </p>
-                            <p style="margin-bottom: 12px; font-weight: bold; color: #fff;">
-                                A Ty jesteś prawdziwa, wyjątkowa i absolutnie najcudowniejsza w całym wszechświecie. ✨
-                            </p>
-                            <p style="font-size: 1.05rem; color: var(--accent); font-weight: bold;">
-                                I co najważniejsze — jesteś moja, Kochana! ❤️
-                            </p>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 5,
-                unlockDate: "2026-09-20",
-                title: "Nocny Czat Telegram",
-                subtitle: "20 września — Dzień 5",
-                shortDesc: "Masz połączenie przychodzące...",
-                icon: "💬",
-                content: `
-                    <div id="tg-screen-call" class="tg-call-screen">
-                        <div>
-                            <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Połączenie Telegram</div>
-                            <img src="1776865854921.png" alt="Zeroed ." class="tg-avatar">
-                            <h3 style="font-size: 1.4rem; color: #fff;">Zeroed .</h3>
-                            <p style="font-size: 0.85rem; color: #22c55e; margin-top: 4px;">Dzwoni do Ciebie...</p>
-                        </div>
-                        
-                        <div class="tg-call-btns">
-                            <button class="tg-btn-decline" onclick="alert('Nawet nie próbuj odrzucać! Odbierz rozmowę 😉')">📞</button>
-                            <button class="tg-btn-accept" onclick="acceptTgCall()">📞</button>
-                        </div>
-                    </div>
-
-                    <div id="tg-screen-chat" class="tg-chat-screen" style="display: none;">
-                        <div class="tg-chat-header">
-                            <img src="1776865854921.png" alt="Zeroed .">
-                            <div>
-                                <div style="font-weight: bold; font-size: 0.95rem; color: #fff;">Zeroed .</div>
-                                <div id="tg-status" style="font-size: 0.75rem; color: #22c55e;">online</div>
-                            </div>
-                        </div>
-
-                        <div class="tg-pinned-msg">
-                            <div class="tg-pinned-bar"></div>
-                            <div>
-                                <div style="font-size: 0.7rem; color: #64b5f6; font-weight: bold;">Przypięta wiadomość</div>
-                                <div class="tg-pinned-text">Dla Mojej Najważniejszej Osoby na Świecie... ❤️</div>
-                            </div>
-                        </div>
-
-                        <div id="tg-chat-messages" class="tg-chat-body"></div>
-
-                        <div id="tg-bottom-bar" class="tg-bottom-bar" style="display: none;">
-                            <button class="tg-type-btn" onclick="triggerFireworks(event)">
-                                ✍️ Napisz do mnie... ❤️
-                            </button>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 6,
-                unlockDate: "2026-09-21",
-                title: "Niespodzianka dla Ciebie!",
-                subtitle: "21 września — Dzień 6",
-                shortDesc: "Mały prezent na zakupy dla Mojej Księżniczki...",
-                icon: "🎁",
-                content: `
-                    <div class="allegro-card">
-                        <div class="allegro-logo">allegro</div>
-                        <h3 style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;">Karta Podarunkowa Allegro 🎁</h3>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                            Kup sobie coś pięknego, co sprawi Ci radość! Wybierz cokolwiek zechcesz — zasługujesz na wszystko, co najlepsze ❤️
-                        </p>
-
-                        <div class="code-box">
-                            <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Twój Kod Podarunkowy:</div>
-                            <div class="code-text" id="allegroCode">YgHp5qw5TgBP</div>
-                            <button class="copy-btn" id="copyBtn" onclick="copyAllegroCode()">Skopiuj kod 📋</button>
-                        </div>
-
-                        <div style="margin-top: 15px; font-size: 0.85rem; color: #f8fafc; font-style: italic;">
-                            Pamiętaj, że Twój uśmiech to mój ulubiony widok na świecie... Kocham Cię! ✨❤️
-                        </div>
-                    </div>
-                `
+                title: "Dzień 2",
+                subtitle: "17 września",
+                icon: "💌",
+                text: "Wiadomość na Dzień 2..."
             }
         ];
 
-        // Проверка блокировки всего сайта (до 15 числа сайт заблюрен / заблокирован)
-        function checkSiteAccess() {
-            if (FORCE_UNLOCK_ALL) return;
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-
-            if (todayStr < SITE_UNLOCK_DATE) {
-                const overlay = document.createElement('div');
-                overlay.className = 'site-lock-overlay';
-                overlay.innerHTML = `
-                    <div style="font-size: 3.5rem; margin-bottom: 15px;">🔒</div>
-                    <h2 style="color: var(--accent); margin-bottom: 10px; font-size: 1.6rem;">Niespodzianka wkrótce!</h2>
-                    <p style="color: var(--text-muted); max-width: 340px; line-height: 1.5; font-size: 0.95rem;">
-                        Strona otwiera się 15 września. Poczekaj jeszcze chwilę, moja kochana! ❤️
-                    </p>
-                `;
-                document.body.appendChild(overlay);
-            }
-        }
-
-        // Проверка доступности отдельной карточки по дате
-        function isUnlocked(unlockDateStr) {
-            if (FORCE_UNLOCK_ALL) return true;
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            return todayStr >= unlockDateStr;
-        }
-
-        // Отрисовка карточек на странице
-        function renderCards() {
-            const grid = document.getElementById('cardsGrid');
-            grid.innerHTML = '';
-
-            cardsData.forEach(card => {
-                const unlocked = isUnlocked(card.unlockDate);
-                const cardEl = document.createElement('div');
-                cardEl.className = `card ${unlocked ? '' : 'locked'}`;
-                
-                if (unlocked) {
-                    cardEl.onclick = () => openModal(card.id);
-                } else {
-                    cardEl.onclick = () => alert(`Ta karta zostanie odblokowana ${card.unlockDate}! 🔒`);
-                }
-
-                cardEl.innerHTML = `
-                    <div class="card-icon">${unlocked ? card.icon : '🔒'}</div>
-                    <div class="card-info">
-                        <div class="subtitle">${card.subtitle}</div>
-                        <h3>${card.title}</h3>
-                        <div class="desc">${unlocked ? card.shortDesc : 'Niespodzianka jeszcze zablokowana...'}</div>
-                    </div>
-                `;
-                grid.appendChild(cardEl);
-            });
-        }
-
-        let currentSlide = 0;
-        let tgChatTimer = null;
-
-        function openModal(id) {
-            const card = cardsData.find(c => c.id === id);
-            if (!card || !isUnlocked(card.unlockDate)) return;
-
-            document.getElementById('modalContent').innerHTML = card.content;
-            document.getElementById('modalOverlay').classList.add('active');
-            currentSlide = 0;
-
-            if (id === 3) {
-                setTimeout(initMaze, 100);
-            } else if (id === 4) {
-                initQuiz();
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-            if (tgChatTimer) {
-                clearInterval(tgChatTimer);
-                tgChatTimer = null;
-            }
-        }
-
-        function copyAllegroCode() {
-            const codeText = document.getElementById('allegroCode').innerText;
-            navigator.clipboard.writeText(codeText).then(() => {
-                const btn = document.getElementById('copyBtn');
-                btn.innerText = 'Skopiowano! 🎉';
-                btn.style.background = '#22c55e';
-                setTimeout(() => {
-                    btn.innerText = 'Skopiuj kod 📋';
-                    btn.style.background = '#ff5a00';
-                }, 3000);
-            }).catch(err => {
-                alert('Kod: ' + codeText);
-            });
-        }
-
-        function moveSlide(direction) {
-            const slides = document.querySelectorAll('.slide');
-            const dots = document.querySelectorAll('.dot');
-            if (!slides.length) return;
-
-            slides[currentSlide].classList.remove('active');
-            if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
-
-            currentSlide = (currentSlide + direction + slides.length) % slides.length;
-
-            slides[currentSlide].classList.add('active');
-            if (dots[currentSlide]) dots[currentSlide].classList.add('active');
-        }
-
-        function setSlide(index) {
-            const slides = document.querySelectorAll('.slide');
-            const dots = document.querySelectorAll('.dot');
-            if (!slides.length) return;
-
-            slides[currentSlide].classList.remove('active');
-            if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
-
-            currentSlide = index;
-
-            slides[currentSlide].classList.add('active');
-            if (dots[currentSlide]) dots[currentSlide].classList.add('active');
-        }
-
-        let playerPos = { x: 0, y: 0 };
-        const mazeGrid = [
-            [0, 1, 0, 0, 0, 0],
-            [0, 1, 0, 1, 1, 0],
-            [0, 0, 0, 1, 0, 0],
-            [1, 1, 0, 1, 0, 1],
-            [0, 0, 0, 0, 0, 1],
-            [0, 1, 1, 1, 0, 0]
-        ];
-        const mapSize = 6;
-
-        function initMaze() {
-            playerPos = { x: 0, y: 0 };
-            const canvas = document.getElementById('mazeCanvas');
-            if (!canvas) return;
-            
-            const size = Math.min(canvas.parentElement.clientWidth - 20, 280);
-            canvas.width = size;
-            canvas.height = size;
-            
-            drawMaze();
-        }
-
-        function drawMaze() {
-            const canvas = document.getElementById('mazeCanvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const cellSize = canvas.width / mapSize;
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let r = 0; r < mapSize; r++) {
-                for (let c = 0; c < mapSize; c++) {
-                    if (mazeGrid[r][c] === 1) {
-                        ctx.fillStyle = '#334155';
-                        ctx.beginPath();
-                        ctx.roundRect(c * cellSize + 2, r * cellSize + 2, cellSize - 4, cellSize - 4, 6);
-                        ctx.fill();
-                    }
-                }
-            }
-
-            ctx.font = `${cellSize * 0.4}px serif`;
-            ctx.fillText('🇵🇱👧', (mapSize - 1) * cellSize + 2, (mapSize - 1) * cellSize + cellSize * 0.65);
-            ctx.fillText('🇲🇩👦', playerPos.x * cellSize + 2, playerPos.y * cellSize + cellSize * 0.65);
-        }
-
-        function movePlayer(dx, dy) {
-            const newX = playerPos.x + dx;
-            const newY = playerPos.y + dy;
-
-            if (newX >= 0 && newX < mapSize && newY >= 0 && newY < mapSize) {
-                if (mazeGrid[newY][newX] === 0) {
-                    playerPos.x = newX;
-                    playerPos.y = newY;
-                    drawMaze();
-
-                    if (newX === mapSize - 1 && newY === mapSize - 1) {
-                        setTimeout(() => {
-                            document.getElementById('maze-container').style.display = 'none';
-                            document.getElementById('reward-section').style.display = 'block';
-                        }, 300);
-                    }
-                }
-            }
-        }
-
-        function openGift(element, message) {
-            const icon = element.querySelector('.gift-icon');
-            const text = element.querySelector('.gift-text');
-            icon.textContent = '💖';
-            text.textContent = message;
-            text.style.display = 'block';
-            element.style.background = 'rgba(236, 72, 153, 0.2)';
-            element.style.borderColor = '#f43f5e';
-        }
-
-        const quizQuestions = [
-            {
-                q: "1. Kto według legend posiada najbardziej zachwycające i ciepłe piękno we Wszechświecie?",
-                opts: ["Nie wiem... 🤷‍♀️", "Naprawdę nie wiem 🙈", "Chyba nie wiem 🌸", "Nie wiem, powiedz mi! ✨"],
-                answer: "Starożytni Grecy myśleli, że to Afrodyta. Ale oni po prostu nigdy nie widzieli Twojego uśmiechu i Twoich pięknych oczu! Dla mnie najpiękniejsza jesteś tylko Ty. ❤️"
-            },
-            {
-                q: "2. Czyje spojrzenie i urok potrafią oczarować i podbić serce od pierwszej chwili?",
-                opts: ["Nie wiem 👑", "Nie mam pojęcia 🤔", "Nie wiem, kto? 💖", "Skąd mam wiedzieć? 😅"],
-                answer: "Historycy piszą o Kleopatrze, ale jej urok jest niczym w porównaniu z tym, jak sprawiasz, że moje serce bije szybciej za każdym razem, gdy do mnie piszesz! 🥰"
-            },
-            {
-                q: "3. Dla kogo w historii byli gotowi pokonać wszelkie odległości, przeszkody i oceany?",
-                opts: ["Nie wiem... 🌊", "Naprawdę nie wiem! 🗺️", "Nie wiem, hmmm... 💭", "Nie wiem! 🤗"],
-                answer: "Legenda mówi o Helenie Trojańskiej, dla której przemierzano morza. Ale dla Ciebie jestem gotów pokonać każde kilometry między Mołdawią a Polską! 🚗💨"
-            },
-            {
-                q: "4. Czyj uśmiech artyści i poeci nazwaliby najpiękniejszym arcydziełem na świecie?",
-                opts: ["Nie wiem 🎨", "Nie wiem, Moja Mona Lisa? 🤭", "Naprawdę nie wiem ✨", "Nie wiem! 😄"],
-                answer: "Da Vinci latami malował Monę Lisę, ale Twój szczery uśmiech sprawia, że ten świat staje się o tysiąc razy jaśniejszy i piękniejszy! ✨"
-            },
-            {
-                q: "5. Kto potrafi inspirować do najszczerszych czynów, ciepłych słów i dawać szczęście każdego dnia?",
-                opts: ["Nie wiem... 🎶", "Nie wiem 💫", "Nie wiem, kto to? 🌟", "Nie wiem, Ty wiesz! ❤️"],
-                answer: "Starożytni poeci szukali swoich muz na Olimpie, a moją Muzą jesteś Ty, moja ukochana dziewczyna! 💖"
-            },
-            {
-                q: "6. Czyje ciepło i wierność potrafią ogrzać nawet przez setki kilometrów odległości?",
-                opts: ["Nie wiem ⏳", "Nie wiem... 💌", "Naprawdę nie wiem 🌸", "Nie wiem! 💖"],
-                answer: "Penelopa czekała latami, ale nasza pisanie i więź przez kilometry udowodniły mi, że prawdziwe uczucia nie znają żadnych granic. 🥰"
-            }
-        ];
-
-        let currentQIndex = 0;
-
-        function initQuiz() {
-            currentQIndex = 0;
-            document.getElementById('quiz-container').style.display = 'block';
-            document.getElementById('quiz-final').style.display = 'none';
-            renderQuestion();
-        }
-
-        function renderQuestion() {
-            const box = document.getElementById('quiz-question-box');
-            const data = quizQuestions[currentQIndex];
-
-            let html = `
-                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(236,72,153,0.3); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
-                    <h4 style="font-size: 0.95rem; line-height: 1.4; color: #f8fafc; margin-bottom: 12px;">${data.q}</h4>
-                    <div id="options-list">
+        // Генерируем карточки на странице
+        const cardsGrid = document.getElementById('cardsGrid');
+        cardsData.forEach(card => {
+            const cardElem = document.createElement('div');
+            cardElem.className = 'card';
+            cardElem.onclick = () => openCardModal(card.id);
+            cardElem.innerHTML = `
+                <div class="card-icon">${card.icon}</div>
+                <div class="card-title">${card.title}</div>
+                <div class="card-subtitle">${card.subtitle}</div>
             `;
-
-            data.opts.forEach(opt => {
-                html += `<button class="quiz-opt-btn" onclick="selectAnswer('${data.answer.replace(/'/g, "\\'")}')">${opt}</button>`;
-            });
-
-            html += `
-                    </div>
-                    <div id="answer-reveal" style="display: none; margin-top: 15px; padding: 12px; background: rgba(236,72,153,0.15); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: #fff;"></div>
-                    <button id="next-q-btn" onclick="nextQuestion()" style="display: none; width: 100%; margin-top: 15px; padding: 10px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-weight: bold; cursor: pointer;">Następne pytanie ➡️</button>
-                </div>
-            `;
-
-            box.innerHTML = html;
-        }
-
-        function selectAnswer(ansText) {
-            const reveal = document.getElementById('answer-reveal');
-            const nextBtn = document.getElementById('next-q-btn');
-            const optsList = document.getElementById('options-list');
-
-            optsList.style.pointerEvents = 'none';
-            optsList.style.opacity = '0.6';
-
-            reveal.innerHTML = ansText;
-            reveal.style.display = 'block';
-            nextBtn.style.display = 'block';
-        }
-
-        function nextQuestion() {
-            currentQIndex++;
-            if (currentQIndex < quizQuestions.length) {
-                renderQuestion();
-            } else {
-                document.getElementById('quiz-container').style.display = 'none';
-                document.getElementById('quiz-final').style.display = 'block';
-            }
-        }
-
-        const tgMessages = [
-            "Hej, Moja Gwiazdeczko... Cieszę się, że odebrałaś ❤️",
-            "Chciałem Ci po prostu powiedzieć parę słów przed snem...",
-            "Wiesz, czasami patrzę w nocne niebo i myślę o nas.",
-            "Gwiazdy na niebie są piękne, ale dla mnie najjaśniejszą gwiazdą we Wszechświecie jesteś Ty... ✨",
-            "Nawet jeśli dzielą nas setki kilometrów, każda wiadomość od Ciebie sprawia, że jesteś bardzo blisko mojego serca.",
-            "Jesteś moim najcenniejszym skarbm i czymś najpiękniejszym, co spotkało mnie w życiu. 💎",
-            "Pamiętaj o tym zawsze. Dobranoc, Kochana! ❤️"
-        ];
-
-        let tgMsgIdx = 0;
-
-        function acceptTgCall() {
-            document.getElementById('tg-screen-call').style.display = 'none';
-            document.getElementById('tg-screen-chat').style.display = 'flex';
-            
-            tgMsgIdx = 0;
-            const container = document.getElementById('tg-chat-messages');
-            container.innerHTML = '';
-            document.getElementById('tg-bottom-bar').style.display = 'none';
-            
-            pushTgMessage();
-            tgChatTimer = setInterval(pushTgMessage, 4500);
-        }
-
-        function pushTgMessage() {
-            if (tgMsgIdx >= tgMessages.length) {
-                clearInterval(tgChatTimer);
-                document.getElementById('tg-status').textContent = 'online';
-                document.getElementById('tg-status').style.color = '#22c55e';
-                
-                setTimeout(() => {
-                    document.getElementById('tg-bottom-bar').style.display = 'flex';
-                }, 1000);
-                return;
-            }
-
-            const statusEl = document.getElementById('tg-status');
-            statusEl.textContent = 'pisze...';
-            statusEl.style.color = '#38bdf8';
-
-            setTimeout(() => {
-                const now = new Date();
-                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                
-                const container = document.getElementById('tg-chat-messages');
-                
-                const msgWrapper = document.createElement('div');
-                msgWrapper.className = 'tg-msg-wrapper';
-                
-                msgWrapper.innerHTML = `
-                    <div class="tg-msg">
-                        <div>${tgMessages[tgMsgIdx]}</div>
-                        <div class="tg-msg-time">${timeStr} ✓✓</div>
-                    </div>
-                    <div class="msg-reactions-inline">
-                        <button class="msg-react-btn" onclick="addMsgReaction(this, '❤️')">❤️ <span class="count">0</span></button>
-                        <button class="msg-react-btn" onclick="addMsgReaction(this, '🔥')">🔥 <span class="count">0</span></button>
-                        <button class="msg-react-btn" onclick="addMsgReaction(this, '🥰')">🥰 <span class="count">0</span></button>
-                        <button class="msg-react-btn" onclick="addMsgReaction(this, '✨')">✨ <span class="count">0</span></button>
-                    </div>
-                `;
-                
-                container.appendChild(msgWrapper);
-                container.scrollTop = container.scrollHeight;
-
-                tgMsgIdx++;
-                statusEl.textContent = 'online';
-                statusEl.style.color = '#22c55e';
-            }, 1200);
-        }
-
-        function addMsgReaction(btn, emoji) {
-            const countEl = btn.querySelector('.count');
-            let count = parseInt(countEl.textContent) || 0;
-            count++;
-            countEl.textContent = count;
-            btn.style.background = 'rgba(236, 72, 153, 0.25)';
-            btn.style.borderColor = 'var(--accent)';
-
-            const chatScreen = document.getElementById('tg-screen-chat');
-            const flying = document.createElement('div');
-            flying.className = 'flying-emoji';
-            flying.textContent = emoji;
-
-            const rect = btn.getBoundingClientRect();
-            const chatRect = chatScreen.getBoundingClientRect();
-
-            flying.style.left = (rect.left - chatRect.left + 10) + 'px';
-            flying.style.top = (rect.top - chatRect.top - 20) + 'px';
-
-            chatScreen.appendChild(flying);
-
-            setTimeout(() => {
-                flying.remove();
-            }, 1800);
-        }
-
-        function triggerFireworks(event) {
-            const chatScreen = document.getElementById('tg-screen-chat');
-            const emojis = ['💖', '💗', '💓', '💞', '💘', '❤️', '❣️', '🥰', '😍', '😻', '💋', '🎉', '✨', '🎆'];
-
-            for (let i = 0; i < 18; i++) {
-                setTimeout(() => {
-                    const flying = document.createElement('div');
-                    flying.className = 'flying-emoji';
-                    flying.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
-                    const randomX = Math.random() * (chatScreen.clientWidth - 60) + 20;
-                    flying.style.left = randomX + 'px';
-                    flying.style.bottom = '40px';
-
-                    chatScreen.appendChild(flying);
-
-                    setTimeout(() => {
-                        flying.remove();
-                    }, 1800);
-                }, i * 60);
-            }
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-                const modal = document.getElementById('modalOverlay');
-                if (modal.classList.contains('active')) {
-                    e.preventDefault();
-                }
-            }
-            if (e.key === 'ArrowUp') movePlayer(0, -1);
-            if (e.key === 'ArrowDown') movePlayer(0, 1);
-            if (e.key === 'ArrowLeft') movePlayer(-1, 0);
-            if (e.key === 'ArrowRight') movePlayer(1, 0);
+            cardsGrid.appendChild(cardElem);
         });
 
-        // Запуск проверок при загрузке страницы
-        checkSiteAccess();
-        renderCards();
+        // Обработка клика по карточке
+        function openCardModal(id) {
+            if (id === 0) {
+                openConstellationModal();
+            } else {
+                const card = cardsData.find(c => c.id === id);
+                document.getElementById('modalTitle').innerText = card.title;
+                document.getElementById('modalBody').innerText = card.text || "Niespodzianka!";
+                document.getElementById('standardModal').classList.add('active');
+            }
+        }
+
+        function closeStandardModal() {
+            document.getElementById('standardModal').classList.remove('active');
+        }
+
+        // Web Audio API Звуки
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playStarSound(pitchIndex = 0) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const frequencies = [523.25, 659.25, 783.99, 1046.50];
+            osc.frequency.value = frequencies[pitchIndex] || 523.25;
+            osc.type = 'sine';
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        function playWinSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+            notes.forEach((freq, i) => {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.frequency.value = freq;
+                    osc.type = 'triangle';
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.5);
+                }, i * 100);
+            });
+        }
+
+        // Логика Созвездия
+        let canvas, ctx;
+        let points = [];
+        let connectedPath = [];
+        let isDrawing = false;
+
+        function openConstellationModal() {
+            const modal = document.getElementById('constellationModal');
+            modal.classList.add('active');
+            setTimeout(initCanvas, 50);
+        }
+
+        function closeConstellation() {
+            document.getElementById('constellationModal').classList.remove('active');
+        }
+
+        function initCanvas() {
+            const wrapper = document.getElementById('skyWrapper');
+            canvas = document.getElementById('constellationCanvas');
+            ctx = canvas.getContext('2d');
+            
+            canvas.width = wrapper.clientWidth;
+            canvas.height = wrapper.clientHeight;
+
+            const starElems = document.querySelectorAll('.star-point');
+            points = Array.from(starElems).map(elem => {
+                const rect = elem.getBoundingClientRect();
+                const wrapperRect = wrapper.getBoundingClientRect();
+                return {
+                    id: parseInt(elem.dataset.id),
+                    x: rect.left - wrapperRect.left + rect.width / 2,
+                    y: rect.top - wrapperRect.top + rect.height / 2,
+                    elem: elem
+                };
+            });
+
+            connectedPath = [];
+            resetCanvas();
+            attachListeners(wrapper);
+        }
+
+        function resetCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            points.forEach(p => p.elem.classList.remove('active'));
+        }
+
+        function attachListeners(wrapper) {
+            wrapper.onpointerdown = handlePointerDown;
+            wrapper.onpointermove = handlePointerMove;
+            wrapper.onpointerup = handlePointerUp;
+        }
+
+        function handlePointerDown(e) {
+            const hit = getHitPoint(e);
+            if (hit) {
+                isDrawing = true;
+                addPointToPath(hit);
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!isDrawing) return;
+            const wrapper = document.getElementById('skyWrapper');
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const currX = e.clientX - wrapperRect.left;
+            const currY = e.clientY - wrapperRect.top;
+
+            redraw(currX, currY);
+
+            const hit = getHitPoint(e);
+            if (hit && !connectedPath.includes(hit)) {
+                addPointToPath(hit);
+            }
+        }
+
+        function handlePointerUp() {
+            isDrawing = false;
+            if (connectedPath.length === points.length) {
+                completeConstellation();
+            } else {
+                connectedPath = [];
+                resetCanvas();
+            }
+        }
+
+        function getHitPoint(e) {
+            const wrapper = document.getElementById('skyWrapper');
+            const wrapperRect = wrapper.getBoundingClientRect();
+            const x = e.clientX - wrapperRect.left;
+            const y = e.clientY - wrapperRect.top;
+
+            return points.find(p => {
+                const dist = Math.hypot(p.x - x, p.y - y);
+                return dist < 28;
+            });
+        }
+
+        function addPointToPath(point) {
+            connectedPath.push(point);
+            point.elem.classList.add('active');
+            playStarSound(connectedPath.length - 1);
+        }
+
+        function redraw(currX, currY) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (connectedPath.length === 0) return;
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#f472b6';
+            ctx.shadowBlur = 10;
+
+            ctx.moveTo(connectedPath[0].x, connectedPath[0].y);
+            for (let i = 1; i < connectedPath.length; i++) {
+                ctx.lineTo(connectedPath[i].x, connectedPath[i].y);
+            }
+
+            if (isDrawing && currX !== undefined) {
+                ctx.lineTo(currX, currY);
+            }
+
+            ctx.stroke();
+        }
+
+        function completeConstellation() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#f472b6';
+            ctx.shadowBlur = 15;
+
+            ctx.moveTo(connectedPath[0].x, connectedPath[0].y);
+            for (let i = 1; i < connectedPath.length; i++) {
+                ctx.lineTo(connectedPath[i].x, connectedPath[i].y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            playWinSound();
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+            }
+
+            setTimeout(() => {
+                document.getElementById('skyWrapper').style.display = 'none';
+                document.querySelector('.constellation-title').style.display = 'none';
+                document.querySelector('.constellation-hint').style.display = 'none';
+                document.getElementById('constellationResult').classList.remove('hidden');
+            }, 600);
+        }
     </script>
 </body>
 </html>
