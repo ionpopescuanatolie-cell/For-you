@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dla Mojej Polskiej Księżniczki ❤️</title>
+    <title>Dla Mojej Mołdawskiej Księżniczki ❤️</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -114,7 +114,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.95);
+            background: rgba(15, 23, 42, 0.98);
             backdrop-filter: blur(12px);
             z-index: 9999;
             display: flex;
@@ -309,17 +309,25 @@
             transform: translateX(3px);
         }
 
-        /* Day 5: Telegram Styles */
+        /* Day 5: Telegram Styles Fixed */
         .tg-call-screen {
             background: linear-gradient(180deg, #1d2733 0%, #0f1721 100%);
             border-radius: 16px;
-            padding: 30px 20px;
+            padding: 35px 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
             min-height: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tg-avatar-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         .tg-avatar {
@@ -329,12 +337,12 @@
             object-fit: cover;
             border: 3px solid rgba(255,255,255,0.2);
             box-shadow: 0 0 25px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
+            display: block;
         }
 
         .tg-call-btns {
             display: flex;
-            justify-style: space-around;
+            justify-content: space-evenly;
             width: 100%;
             margin-top: 30px;
         }
@@ -350,6 +358,10 @@
             cursor: pointer;
             box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
             animation: pulseGreen 1.2s infinite alternate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         .tg-btn-decline {
@@ -362,6 +374,10 @@
             font-size: 1.8rem;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
 
         @keyframes pulseGreen {
@@ -614,11 +630,8 @@
     </div>
 
     <script>
-        // Дата, до которой весь сайт закрыт (15 сентября 2026 года)
-        const SITE_UNLOCK_DATE = "2026-09-12";
-        
-        // Установите в true, если хотите временно открыть ВСЕ карточки для проверки
-        const FORCE_UNLOCK_ALL = true;
+        // Флаг полной разблокировки для отладки
+        const FORCE_UNLOCK_ALL = false;
 
         const cardsData = [
             {
@@ -890,7 +903,9 @@
                     <div id="tg-screen-call" class="tg-call-screen">
                         <div>
                             <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Połączenie Telegram</div>
-                            <img src="1776865854921.png" alt="Zeroed ." class="tg-avatar">
+                            <div class="tg-avatar-wrap">
+                                <img src="1776865854921.png" alt="Zeroed ." class="tg-avatar">
+                            </div>
                             <h3 style="font-size: 1.4rem; color: #fff;">Zeroed .</h3>
                             <p style="font-size: 0.85rem; color: #22c55e; margin-top: 4px;">Dzwoni do Ciebie...</p>
                         </div>
@@ -957,13 +972,14 @@
             }
         ];
 
-        // Проверка блокировки всего сайта (до 15 числа сайт заблюрен / заблокирован)
+        // Проверка блокировки всего сайта до 15 сентября 2026
         function checkSiteAccess() {
             if (FORCE_UNLOCK_ALL) return;
+            
             const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
+            const unlockDate = new Date(2026, 8, 15); // 15 сентября 2026 (месяцы в JS с 0)
 
-            if (todayStr < SITE_UNLOCK_DATE) {
+            if (now < unlockDate) {
                 const overlay = document.createElement('div');
                 overlay.className = 'site-lock-overlay';
                 overlay.innerHTML = `
@@ -977,15 +993,21 @@
             }
         }
 
-        // Проверка доступности отдельной карточки по дате
+        // Проверка доступности каждой конкретной карточки
         function isUnlocked(unlockDateStr) {
             if (FORCE_UNLOCK_ALL) return true;
+            
+            const parts = unlockDateStr.split('-');
+            const cardDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
             const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            return todayStr >= unlockDateStr;
+            
+            now.setHours(0, 0, 0, 0);
+            cardDate.setHours(0, 0, 0, 0);
+
+            return now >= cardDate;
         }
 
-        // Отрисовка карточек на странице
+        // Отрисовка списка карточек
         function renderCards() {
             const grid = document.getElementById('cardsGrid');
             grid.innerHTML = '';
@@ -1063,7 +1085,6 @@
             let currentMousePos = null;
             let isCompleted = false;
 
-            // Background ambient background stars
             const bgStars = [];
             for (let i = 0; i < 40; i++) {
                 bgStars.push({
@@ -1077,7 +1098,6 @@
             function draw() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Draw background stars
                 bgStars.forEach(s => {
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
@@ -1085,7 +1105,6 @@
                     ctx.fill();
                 });
 
-                // Draw connected lines
                 if (connectedCount > 0) {
                     ctx.beginPath();
                     ctx.moveTo(stars[0].x, stars[0].y);
@@ -1093,7 +1112,7 @@
                         ctx.lineTo(stars[i].x, stars[i].y);
                     }
                     if (connectedCount >= stars.length - 1) {
-                        ctx.lineTo(stars[0].x, stars[0].y); // Close loop
+                        ctx.lineTo(stars[0].x, stars[0].y);
                     }
                     ctx.strokeStyle = '#ec4899';
                     ctx.lineWidth = 3;
@@ -1103,7 +1122,6 @@
                     ctx.shadowBlur = 0;
                 }
 
-                // Draw active drag line
                 if (isDragging && currentMousePos && connectedCount < stars.length - 1) {
                     ctx.beginPath();
                     ctx.moveTo(stars[connectedCount].x, stars[connectedCount].y);
@@ -1115,7 +1133,6 @@
                     ctx.setLineDash([]);
                 }
 
-                // Draw heart text "15.09" if finished
                 if (isCompleted) {
                     ctx.font = 'bold 22px Segoe UI, sans-serif';
                     ctx.fillStyle = '#f8fafc';
@@ -1128,7 +1145,6 @@
                     ctx.shadowBlur = 0;
                 }
 
-                // Draw Constellation Stars
                 stars.forEach((star, idx) => {
                     ctx.beginPath();
                     ctx.arc(star.x, star.y, idx <= connectedCount ? 7 : 5, 0, Math.PI * 2);
@@ -1138,7 +1154,6 @@
                     ctx.fill();
                     ctx.shadowBlur = 0;
 
-                    // Number indicator for next target star
                     if (idx === connectedCount + 1 && !isCompleted) {
                         ctx.beginPath();
                         ctx.arc(star.x, star.y, 11, 0, Math.PI * 2);
@@ -1554,4 +1569,3 @@
     </script>
 </body>
 </html>
-
