@@ -322,7 +322,7 @@
 
         .tg-call-btns {
             display: flex;
-            justify-content: space-around;
+            justify-style: space-around;
             width: 100%;
             margin-top: 30px;
         }
@@ -602,8 +602,8 @@
     </div>
 
     <script>
-        // Дата, до которой весь сайт закрыт и заблюрен (14 сентября 2026 года)
-        const SITE_UNLOCK_DATE = "2026-09-14";
+        // Дата, до которой весь сайт закрыт и заблюрен (15 сентября 2026 года)
+        const SITE_UNLOCK_DATE = "2026-09-15";
         
         // Флаг тестирования переведен в false, чтобы работала реальная проверка дат
         const FORCE_UNLOCK_ALL = false;
@@ -611,9 +611,9 @@
         const cardsData = [
             {
                 id: 1,
-                unlockDate: "2026-09-15",
+                unlockDate: "2026-09-16",
                 title: "Wszystko zaczęło się od gry",
-                subtitle: "15 września — Dzień 1",
+                subtitle: "16 września — Dzień 1",
                 shortDesc: "Jedna propozycja fuzji, która zmieniła wszystko...",
                 icon: "🎮",
                 content: `
@@ -633,9 +633,9 @@
             },
             {
                 id: 2,
-                unlockDate: "2026-09-16",
+                unlockDate: "2026-09-17",
                 title: "Galeria Naszych Chwil",
-                subtitle: "16 września — Dzień 2",
+                subtitle: "17 września — Dzień 2",
                 shortDesc: "Moje zdjęcia, które do Ciebie wysyłałem...",
                 icon: "📸",
                 content: `
@@ -740,9 +740,9 @@
             },
             {
                 id: 3,
-                unlockDate: "2026-09-17",
+                unlockDate: "2026-09-18",
                 title: "Droga do Ciebie",
-                subtitle: "17 września — Dzień 3",
+                subtitle: "18 września — Dzień 3",
                 shortDesc: "Poprowadź mnie przez labirynt do siebie...",
                 icon: "🧩",
                 content: `
@@ -799,9 +799,9 @@
             },
             {
                 id: 4,
-                unlockDate: "2026-09-18",
+                unlockDate: "2026-09-19",
                 title: "Wielki Quiz «Nie wiem»",
-                subtitle: "18 września — Dzień 4",
+                subtitle: "19 września — Dzień 4",
                 shortDesc: "Pytania o niezwykłych kobietach w historii...",
                 icon: "👑",
                 content: `
@@ -836,9 +836,9 @@
             },
             {
                 id: 5,
-                unlockDate: "2026-09-19",
+                unlockDate: "2026-09-20",
                 title: "Nocny Czat Telegram",
-                subtitle: "19 września — Dzień 5",
+                subtitle: "20 września — Dzień 5",
                 shortDesc: "Masz połączenie przychodzące...",
                 icon: "💬",
                 content: `
@@ -885,9 +885,9 @@
             },
             {
                 id: 6,
-                unlockDate: "2026-09-20",
+                unlockDate: "2026-09-21",
                 title: "Niespodzianka dla Ciebie!",
-                subtitle: "20 września — Dzień 6",
+                subtitle: "21 września — Dzień 6",
                 shortDesc: "Mały prezent na zakupy dla Mojej Księżniczki...",
                 icon: "🎁",
                 content: `
@@ -912,7 +912,7 @@
             }
         ];
 
-        // Проверка блокировки всего сайта (до 14 числа сайт заблюрен / заблокирован)
+        // Проверка блокировки всего сайта (до 15 числа сайт заблюрен / заблокирован)
         function checkSiteAccess() {
             if (FORCE_UNLOCK_ALL) return;
             const now = new Date();
@@ -925,7 +925,7 @@
                     <div style="font-size: 3.5rem; margin-bottom: 15px;">🔒</div>
                     <h2 style="color: var(--accent); margin-bottom: 10px; font-size: 1.6rem;">Niespodzianka wkrótce!</h2>
                     <p style="color: var(--text-muted); max-width: 340px; line-height: 1.5; font-size: 0.95rem;">
-                        Strona otwiera się 14 września. Poczekaj jeszcze chwilę, moja kochana! ❤️
+                        Strona otwiera się 15 września. Poczekaj jeszcze chwilę, moja kochana! ❤️
                     </p>
                 `;
                 document.body.appendChild(overlay);
