@@ -602,13 +602,35 @@
     </div>
 
     <script>
-        // Дата, до которой весь сайт закрыт и заблюрен (15 сентября 2026 года)
+        // Дата, до которой весь сайт закрыт (15 сентября 2026 года)
         const SITE_UNLOCK_DATE = "2026-09-15";
         
-        // Флаг тестирования переведен в false, чтобы работала реальная проверка дат
-        const FORCE_UNLOCK_ALL = true;
+        // Установите в true, если хотите временно открыть ВСЕ карточки для проверки
+        const FORCE_UNLOCK_ALL = false;
 
         const cardsData = [
+            {
+                id: 0,
+                unlockDate: "2026-09-15",
+                title: "Nasza Rocznica!",
+                subtitle: "15 września — Dzień 0",
+                shortDesc: "Wszystkiego najlepszego z okazji naszej rocznicy! ❤️",
+                icon: "💖",
+                content: `
+                    <h3 style="text-align: center; color: var(--accent); margin-bottom: 15px;">Wszystkiego Najlepszego z Okazji Naszej Rocznicy! ❤️</h3>
+                    <p style="line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem;">
+                        Dzisiaj jest dla nas wyjątkowy dzień — nasza rocznica! Minął kolejny czas, odkąd jesteśmy razem, i każda chwila spędzona z Tobą jest dla mnie niezwykłym darem.
+                    </p>
+                    <p style="line-height: 1.6; margin-bottom: 12px; font-size: 0.95rem;">
+                        Chociaż dzieli nas odległość, moje serce jest zawsze przy Tobie. Przygotowałem ten mały kalendarz odliczania, aby sprawić Ci radość i przypomnieć, jak bardzo jesteś dla mnie ważna!
+                    </p>
+                    <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(236, 72, 153, 0.15); border: 1px dashed var(--accent); border-radius: 12px;">
+                        <p style="margin: 0; font-weight: bold; color: #fff; font-size: 1rem;">
+                            To dopiero początek! Wracaj tu codziennie aż do Twoich urodzin (21 września), aby otwierać kolejne niespodzianki... ✨🥰
+                        </p>
+                    </div>
+                `
+            },
             {
                 id: 1,
                 unlockDate: "2026-09-16",
